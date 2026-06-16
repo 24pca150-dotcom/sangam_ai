@@ -1,0 +1,95 @@
+<div class="max-w-6xl mx-auto mt-6" *ngIf="!loading && poem">
+  <div class="mb-6">
+    <a routerLink="/search" class="inline-flex items-center text-slate-400 hover:text-amber-400 transition-colors font-medium">
+      <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+      Back to Search
+    </a>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <!-- Main Content -->
+    <div class="lg:col-span-2 space-y-6">
+      <!-- Original Text Card -->
+      <div class="bg-slate-800/40 border border-slate-700/50 rounded-3xl p-8 sm:p-10 backdrop-blur-sm shadow-xl relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-64 h-64 bg-amber-500/5 rounded-full blur-3xl pointer-events-none"></div>
+        
+        <h1 class="text-3xl sm:text-4xl font-bold text-amber-400 mb-2 relative z-10">{{poem.basic_information.poem_title}}</h1>
+        <p class="text-slate-400 text-lg mb-8 relative z-10">Composed by <span class="text-slate-200 font-semibold">{{poem.basic_information.poet_name}}</span></p>
+
+        <div class="relative z-10">
+          <h3 class="text-xs font-bold tracking-widest text-slate-500 uppercase mb-4 flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path></svg>
+            Original Tamil
+          </h3>
+          <p class="text-2xl text-slate-100 font-serif leading-loose whitespace-pre-line border-l-4 border-amber-500/50 pl-6">{{poem.basic_information.original_tamil_text}}</p>
+        </div>
+      </div>
+
+      <!-- Interpretations Card -->
+      <div class="bg-slate-800/40 border border-slate-700/50 rounded-3xl p-8 backdrop-blur-sm">
+        <h3 class="text-xl font-bold text-white mb-6">Interpretations & Translations</h3>
+        <div class="space-y-8">
+          <div>
+             <h4 class="text-sm font-bold text-amber-400 mb-2">Simple Meaning</h4>
+             <p class="text-slate-300 leading-relaxed">{{poem.meaning_interpretation.simple_tamil_meaning}}</p>
+          </div>
+          <div class="pt-6 border-t border-slate-700/50">
+             <h4 class="text-sm font-bold text-amber-400 mb-2">Detailed Explanation</h4>
+             <p class="text-slate-300 leading-relaxed">{{poem.meaning_interpretation.detailed_tamil_explanation}}</p>
+          </div>
+          <div class="pt-6 border-t border-slate-700/50">
+             <h4 class="text-sm font-bold text-indigo-400 mb-2">English Translation</h4>
+             <p class="text-slate-300 leading-relaxed italic">{{poem.meaning_interpretation.english_translation}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sidebar Context -->
+    <div class="space-y-6">
+      <div class="bg-slate-800/40 border border-slate-700/50 rounded-3xl p-6 backdrop-blur-sm">
+        <h3 class="text-lg font-bold text-white mb-4">Historical Context</h3>
+        <p class="text-slate-300 text-sm leading-relaxed mb-4">{{poem.historical_information.historical_context}}</p>
+        
+        <ul class="space-y-3 mt-4">
+          <li class="flex justify-between items-center py-2 border-b border-slate-700/50">
+            <span class="text-slate-400">Time Period</span>
+            <span class="text-slate-200 font-medium bg-indigo-500/20 px-3 py-1 rounded-lg text-sm border border-indigo-500/20">{{poem.historical_information.time_period}}</span>
+          </li>
+          <li class="flex justify-between items-center py-2 border-b border-slate-700/50">
+            <span class="text-slate-400">Dynasty</span>
+            <span class="text-slate-200 font-medium bg-emerald-500/20 px-3 py-1 rounded-lg text-sm border border-emerald-500/20">{{poem.historical_information.dynasty}}</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="bg-slate-800/40 border border-slate-700/50 rounded-3xl p-6 backdrop-blur-sm">
+        <h3 class="text-lg font-bold text-white mb-3">Entities Mentioned</h3>
+        <div class="space-y-4 mt-4">
+          <div>
+            <h4 class="text-xs font-bold text-slate-500 uppercase mb-1">King / Patron</h4>
+            <p class="text-amber-400 font-medium">{{poem.historical_information.king_mentioned}}</p>
+          </div>
+          <div>
+            <h4 class="text-xs font-bold text-slate-500 uppercase mb-1">Places</h4>
+            <p class="text-indigo-400 font-medium">{{poem.historical_information.place_mentioned}}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-slate-800/40 border border-slate-700/50 rounded-3xl p-6 backdrop-blur-sm">
+        <h3 class="text-lg font-bold text-white mb-3">Social Background</h3>
+        <p class="text-slate-300 text-sm leading-relaxed">{{poem.historical_information.social_background}}</p>
+      </div>
+      
+      <div class="bg-slate-800/40 border border-slate-700/50 rounded-3xl p-6 backdrop-blur-sm">
+        <h3 class="text-lg font-bold text-white mb-3">Poet Details</h3>
+        <p class="text-slate-300 text-sm leading-relaxed">{{poem.basic_information.poet_details}}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="loading" class="flex justify-center items-center py-32 mt-6">
+  <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-amber-500"></div>
+</div>

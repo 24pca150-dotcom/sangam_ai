@@ -1,0 +1,19 @@
+<nav class="bg-slate-800/80 backdrop-blur-md border-b border-slate-700 fixed w-full top-0 z-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      <div class="flex items-center gap-2">
+        <span class="text-xl font-bold bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent">Sangam AI</span>
+      </div>
+      <div class="flex space-x-4">
+        <a routerLink="/" class="text-slate-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Dashboard</a>
+        <a routerLink="/search" class="text-slate-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Search</a>
+        <a routerLink="/chat" class="text-slate-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">AI Chat</a>
+        <a routerLink="/admin" class="text-slate-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Admin</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<main class="pt-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto pb-12">
+  <router-outlet></router-outlet>
+</main>
