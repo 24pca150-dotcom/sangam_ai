@@ -34,27 +34,42 @@ export class ChatInterfaceComponent implements OnInit, AfterViewChecked {
 
   ngOnInit() {
     this.loadChatHistory();
+    if (this.messages.length === 1) {
+      this.fetchStarterQuestions();
+    }
+  }
+
+  fetchStarterQuestions() {
     this.api.getStarterQa().subscribe({
       next: (res) => {
         let starters: any[] = [];
         if (res && res.length > 0) {
           starters = res.map((r: any) => ({id: r.id, question: r.question}));
         } else {
-          starters = [
-            {id: 0, question: "புறநானூறு என்றால் என்ன?"},
-            {id: 0, question: "களம்புக என்றால் என்ன?"}
-          ];
+          starters = this.getFallbackStarters();
         }
-
-        // Attach starters to the first greeting message if it's the only message
-        if (this.messages.length === 1 && this.messages[0].content === this.defaultGreeting.content) {
-          this.messages[0].suggested_questions = starters.map(s => s.question);
-          this.messages[0].suggested_question_ids = starters.map(s => s.id);
-          this.saveChatHistory();
-        }
+        this.attachStarters(starters);
       },
-      error: (err) => console.error(err)
+      error: (err) => {
+        console.error('Error fetching starter QA:', err);
+        this.attachStarters(this.getFallbackStarters());
+      }
     });
+  }
+
+  getFallbackStarters() {
+    return [
+      {id: 0, question: "புறநானூறு என்றால் என்ன?"},
+      {id: 0, question: "களம்புக என்றால் என்ன?"}
+    ];
+  }
+
+  attachStarters(starters: any[]) {
+    if (this.messages.length === 1) {
+      this.messages[0].suggested_questions = starters.map(s => s.question);
+      this.messages[0].suggested_question_ids = starters.map(s => s.id);
+      this.saveChatHistory();
+    }
   }
 
   ngAfterViewChecked() {
@@ -67,10 +82,10 @@ export class ChatInterfaceComponent implements OnInit, AfterViewChecked {
       try {
         this.messages = JSON.parse(saved);
       } catch (e) {
-        this.messages = [this.defaultGreeting];
+        this.messages = [{ ...this.defaultGreeting }];
       }
     } else {
-      this.messages = [this.defaultGreeting];
+      this.messages = [{ ...this.defaultGreeting }];
     }
   }
   
@@ -79,8 +94,9 @@ export class ChatInterfaceComponent implements OnInit, AfterViewChecked {
   }
   
   newChat() {
-    this.messages = [this.defaultGreeting];
+    this.messages = [{ ...this.defaultGreeting }];
     this.saveChatHistory();
+    this.fetchStarterQuestions();
   }
 
   scrollToBottom(): void {
