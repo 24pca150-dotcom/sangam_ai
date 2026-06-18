@@ -1,7 +1,7 @@
 <div class="space-y-8 animate-fade-in mt-6">
   <!-- Hero Section -->
   <div
-    class="relative rounded-3xl bg-slate-800/40 border border-slate-700/50 p-8 sm:p-14 overflow-hidden isolation shadow-2xl">
+    class="relative rounded-3xl bg-slate-800/40 border border-slate-700/50 p-8 sm:p-14 overflow-hidden isolation shadow-2xl flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-12">
     <!-- Decorative gradients -->
     <div
       class="absolute -top-32 -right-32 w-[30rem] h-[30rem] bg-orange-500/10 rounded-full blur-3xl -z-10 pointer-events-none">
@@ -10,31 +10,35 @@
       class="absolute -bottom-32 -left-32 w-[30rem] h-[30rem] bg-amber-500/10 rounded-full blur-3xl -z-10 pointer-events-none">
     </div>
 
-    <div class="relative z-10 max-w-3xl">
+    <div class="relative z-10 w-full lg:w-[60%] xl:w-[65%] shrink-0">
 
-      <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight text-white mb-6 leading-tight">
-        Discover the Wisdom of <br />
-        <span class="bg-gradient-to-r from-amber-400 via-orange-400 to-red-400 bg-clip-text text-transparent">அறிக
-          புறநானூறு</span>
+      <h1 class="text-4xl sm:text-5xl lg:text-5xl xl:text-6xl font-extrabold tracking-tight text-white mb-6 leading-tight">
+        <span class="whitespace-nowrap">Discover the Wisdom of</span> <br />
+        <span class="bg-gradient-to-r from-amber-400 via-orange-400 to-red-400 bg-clip-text text-transparent pb-2 inline-block whitespace-nowrap mt-2 sm:mt-4">அறிக புறநானூறு</span>
       </h1>
 
       <p class="text-lg sm:text-xl text-slate-300 mb-8 leading-relaxed max-w-2xl">
         Chat with our RAG-powered assistant to uncover deep historical context.
       </p>
 
-      <div class="flex flex-wrap gap-4">
+      <div class="flex flex-col sm:flex-row flex-nowrap gap-4">
         <a routerLink="/explore"
-          class="inline-flex items-center justify-center px-8 py-3.5 text-base font-semibold rounded-xl text-slate-900 bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 transition-all shadow-[0_0_20px_rgba(245,158,11,0.2)] hover:shadow-[0_0_30px_rgba(245,158,11,0.4)] transform hover:-translate-y-0.5">
+          class="inline-flex items-center justify-center px-6 py-3.5 text-base font-semibold rounded-xl text-slate-900 bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 transition-all shadow-[0_0_20px_rgba(245,158,11,0.2)] hover:shadow-[0_0_30px_rgba(245,158,11,0.4)] transform hover:-translate-y-0.5 whitespace-nowrap">
           அறிக புறநானூறு
-          <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+          <svg class="w-5 h-5 ml-2 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path>
           </svg>
         </a>
         <a routerLink="/chat"
-          class="inline-flex items-center justify-center px-8 py-3.5 text-base font-semibold rounded-xl text-white bg-slate-800 hover:bg-slate-700 border border-slate-600 hover:border-slate-500 transition-all transform hover:-translate-y-0.5">
+          class="inline-flex items-center justify-center px-6 py-3.5 text-base font-semibold rounded-xl text-white bg-slate-800 hover:bg-slate-700 border border-slate-600 hover:border-slate-500 transition-all transform hover:-translate-y-0.5 whitespace-nowrap">
           An interactive conversational AI
         </a>
       </div>
+    </div>
+
+    <!-- Right Side Logo -->
+    <div class="relative z-10 w-full lg:w-[40%] xl:w-[35%] flex justify-center lg:justify-end mt-8 lg:mt-0">
+      <img src="sangam-logo.png" alt="Sangam Logo" class="w-64 h-64 sm:w-80 sm:h-80 lg:w-full lg:max-w-[28rem] xl:max-w-[32rem] object-contain drop-shadow-[0_0_40px_rgba(245,158,11,0.4)] hover:scale-105 transition-transform duration-700">
     </div>
   </div>
 

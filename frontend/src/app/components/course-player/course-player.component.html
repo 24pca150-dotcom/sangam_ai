@@ -1,11 +1,15 @@
 <div class="max-w-6xl mx-auto mt-6 px-4 animate-fade-in" *ngIf="!loading">
-  
+
   <div class="mb-6 flex justify-between items-center">
-    <a routerLink="/explore" class="inline-flex items-center text-slate-400 hover:text-amber-400 transition-colors font-medium">
-      <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+    <a routerLink="/explore"
+      class="inline-flex items-center px-4 py-2 rounded-xl bg-slate-800/80 text-slate-300 hover:text-amber-400 hover:bg-slate-800 border border-slate-700 hover:border-amber-500/50 transition-all font-semibold shadow-lg backdrop-blur-sm group">
+      <svg class="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor"
+        viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+      </svg>
       Back to Explore
     </a>
-    <h1 class="text-2xl font-bold text-white">
+    <h1 class="text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent drop-shadow-sm pb-1 text-right">
       <span *ngIf="poem">Poem {{poem.poem_number}}: {{poem.basic_information.poem_title}}</span>
       <span *ngIf="!poem">Interactive Course</span>
     </h1>
@@ -14,31 +18,35 @@
   <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
     <!-- Main Content Area -->
     <div class="lg:col-span-2 space-y-6">
-      
+
       <!-- Video Player Section -->
-      <div class="bg-slate-900 rounded-3xl overflow-hidden shadow-2xl border border-slate-700/50 aspect-video relative group">
+      <div
+        class="bg-slate-900 rounded-3xl overflow-hidden shadow-2xl border border-slate-700/50 aspect-video relative group">
         <video controls class="w-full h-full object-cover" [src]="videoUrl">
           Your browser does not support the video tag.
         </video>
-        <div class="absolute top-4 right-4 bg-black/50 backdrop-blur-md px-3 py-1 rounded-full text-xs font-medium text-amber-400 border border-amber-500/20">
-          AI Generated Singing
-        </div>
       </div>
 
       <!-- Poem Content Section -->
       <div *ngIf="poem" class="bg-slate-800/40 border border-slate-700/50 rounded-3xl p-8 backdrop-blur-sm">
         <div class="relative z-10">
           <h3 class="text-xs font-bold tracking-widest text-slate-500 uppercase mb-4 flex items-center gap-2">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path></svg>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path>
+            </svg>
             Original Tamil
           </h3>
-          <div *ngIf="poem.line_by_line_meaning?.length; else originalText" class="border-l-4 border-amber-500/50 pl-6 mb-8 space-y-3">
-            <p *ngFor="let line of poem.line_by_line_meaning" class="text-xl sm:text-2xl text-amber-400/90 font-serif leading-relaxed">
+          <div *ngIf="poem.line_by_line_meaning?.length; else originalText"
+            class="border-l-4 border-amber-500/50 pl-6 mb-8 space-y-3">
+            <p *ngFor="let line of poem.line_by_line_meaning"
+              class="text-xl sm:text-2xl text-amber-400/90 font-serif leading-relaxed">
               {{ line.split_line }}
             </p>
           </div>
           <ng-template #originalText>
-            <p class="text-xl sm:text-2xl text-amber-400/90 font-serif leading-loose whitespace-pre-line border-l-4 border-amber-500/50 pl-6 mb-8">{{poem.basic_information.original_tamil_text}}</p>
+            <p
+              class="text-xl sm:text-2xl text-amber-400/90 font-serif leading-loose whitespace-pre-line border-l-4 border-amber-500/50 pl-6 mb-8">
+              {{poem.basic_information.original_tamil_text}}</p>
           </ng-template>
         </div>
 
@@ -48,14 +56,15 @@
             <p class="text-slate-300 leading-relaxed">{{poem.meaning_interpretation.simple_tamil_meaning}}</p>
           </div>
           <div>
-             <h4 class="text-sm font-bold text-indigo-400 mb-2">English Translation</h4>
-             <p class="text-slate-300 leading-relaxed italic">{{poem.meaning_interpretation.english_translation}}</p>
+            <h4 class="text-sm font-bold text-indigo-400 mb-2">English Translation</h4>
+            <p class="text-slate-300 leading-relaxed italic">{{poem.meaning_interpretation.english_translation}}</p>
           </div>
         </div>
       </div>
 
-      <div *ngIf="!poem" class="bg-slate-800/40 border border-slate-700/50 rounded-3xl p-8 backdrop-blur-sm text-center">
-         <p class="text-slate-400">Poem details could not be loaded from the database.</p>
+      <div *ngIf="!poem"
+        class="bg-slate-800/40 border border-slate-700/50 rounded-3xl p-8 backdrop-blur-sm text-center">
+        <p class="text-slate-400">Poem details could not be loaded from the database.</p>
       </div>
 
     </div>
@@ -75,10 +84,11 @@
           </li>
           <li class="flex justify-between items-center py-2 border-b border-slate-700/50">
             <span class="text-slate-400 text-sm">Turai (Theme)</span>
-            <span class="text-emerald-400 font-medium text-sm">{{poem.literary_classification?.thurai || poem.literary_classification?.turai || 'N/A'}}</span>
+            <span class="text-emerald-400 font-medium text-sm">{{poem.literary_classification?.thurai ||
+              poem.literary_classification?.turai || 'N/A'}}</span>
           </li>
         </ul>
-        
+
         <div class="mt-6">
           <h4 class="text-xs font-bold text-slate-500 uppercase mb-2">Historical Background</h4>
           <p class="text-slate-300 text-sm leading-relaxed">{{poem.historical_information.historical_context}}</p>
@@ -88,10 +98,12 @@
   </div>
 
   <!-- Chat Interface Embedded at Bottom -->
-  <div class="mb-16 bg-slate-900 border border-slate-700/50 rounded-3xl overflow-hidden shadow-2xl h-[600px] flex flex-col">
+  <div
+    class="mb-16 bg-slate-900 border border-slate-700/50 rounded-3xl overflow-hidden shadow-2xl h-[600px] flex flex-col">
     <div class="bg-slate-800/80 border-b border-slate-700/50 px-6 py-4 flex items-center justify-between shrink-0">
       <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center p-0.5 shadow-lg shadow-amber-500/20">
+        <div
+          class="w-10 h-10 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center p-0.5 shadow-lg shadow-amber-500/20">
           <div class="w-full h-full bg-slate-900 rounded-full flex items-center justify-center">
             <span class="text-amber-400 font-bold text-lg font-serif">S</span>
           </div>
@@ -105,7 +117,7 @@
         </div>
       </div>
     </div>
-    
+
     <!-- Embed the chat component but override its internal h-screen if necessary via css -->
     <div class="flex-1 overflow-hidden relative course-chat-wrapper">
       <app-chat-interface [isEmbedded]="true"></app-chat-interface>
