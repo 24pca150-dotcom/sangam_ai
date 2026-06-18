@@ -23,9 +23,9 @@ export class CoursePlayerComponent implements OnInit {
     this.poemId = this.route.snapshot.paramMap.get('id');
 
     if (this.poemId === '87') {
-      this.videoUrl = 'https://res.cloudinary.com/dy8bu8suk/video/upload/v1781780294/VID-20260618-WA0007_bs2foy.mp4';
+      this.videoUrl = 'https://res.cloudinary.com/dy8bu8suk/video/upload/v1781782524/VID-20260618-WA0008_pgaxkz.mp4';
     } else if (this.poemId === '101') {
-      this.videoUrl = 'https://res.cloudinary.com/demo/video/upload/v1692275685/sea_turtle.mp4';
+      this.videoUrl = 'https://res.cloudinary.com/dy8bu8suk/video/upload/v1781784633/VID-20260618-WA0010_xrjqqu.mp4';
     } else {
       this.videoUrl = 'https://res.cloudinary.com/demo/video/upload/v1692275685/elephants.mp4';
     }
