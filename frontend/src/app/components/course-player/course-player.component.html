@@ -32,7 +32,14 @@
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path></svg>
             Original Tamil
           </h3>
-          <p class="text-xl sm:text-2xl text-amber-400/90 font-serif leading-loose whitespace-pre-line border-l-4 border-amber-500/50 pl-6 mb-8">{{poem.basic_information.original_tamil_text}}</p>
+          <div *ngIf="poem.line_by_line_meaning?.length; else originalText" class="border-l-4 border-amber-500/50 pl-6 mb-8 space-y-3">
+            <p *ngFor="let line of poem.line_by_line_meaning" class="text-xl sm:text-2xl text-amber-400/90 font-serif leading-relaxed">
+              {{ line.split_line }}
+            </p>
+          </div>
+          <ng-template #originalText>
+            <p class="text-xl sm:text-2xl text-amber-400/90 font-serif leading-loose whitespace-pre-line border-l-4 border-amber-500/50 pl-6 mb-8">{{poem.basic_information.original_tamil_text}}</p>
+          </ng-template>
         </div>
 
         <div class="pt-6 border-t border-slate-700/50 space-y-6">
