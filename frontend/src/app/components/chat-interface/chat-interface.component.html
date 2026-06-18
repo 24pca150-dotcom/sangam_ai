@@ -1,10 +1,10 @@
-<div class="max-w-6xl mx-auto h-[calc(100vh-8rem)] mt-6 flex flex-col bg-slate-800/40 border border-slate-700/50 rounded-3xl shadow-xl backdrop-blur-sm overflow-hidden">
+<div [ngClass]="{'h-full w-full border-0 rounded-none bg-transparent': isEmbedded, 'max-w-6xl mx-auto h-[calc(100vh-8rem)] mt-6 bg-slate-800/40 border border-slate-700/50 rounded-3xl shadow-xl backdrop-blur-sm': !isEmbedded}" class="flex flex-col overflow-hidden">
   
   <div class="bg-slate-900/50 px-6 py-4 border-b border-slate-700/50 flex items-center justify-between">
     <div>
       <h2 class="text-xl font-bold text-white flex items-center gap-2">
         <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-        Sangam AI Assistant
+        அறிக புறநானூறு - An interactive conversational AI
       </h2>
       <p class="text-xs text-slate-400 mt-1">RAG-powered conversational engine</p>
     </div>

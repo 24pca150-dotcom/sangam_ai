@@ -1,0 +1,402 @@
+<div class="max-w-7xl mx-auto mt-8 animate-fade-in px-4">
+  <div class="text-center mb-12">
+    <h1 class="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500 mb-4">
+      Discover Purananuru
+    </h1>
+    <p class="text-slate-400 text-lg max-w-2xl mx-auto">Explore the rich heritage of classical Tamil literature through interactive AI courses and comprehensive analysis.</p>
+  </div>
+
+  <!-- Tabs -->
+  <div class="flex justify-center mb-10">
+    <div class="bg-slate-800/50 p-1.5 rounded-2xl border border-slate-700/50 inline-flex shadow-lg backdrop-blur-sm">
+      <button 
+        (click)="activeTab = 'poems'" 
+        [class.bg-gradient-to-r]="activeTab === 'poems'"
+        [class.from-amber-500]="activeTab === 'poems'"
+        [class.to-orange-500]="activeTab === 'poems'"
+        [class.text-white]="activeTab === 'poems'"
+        [class.shadow-md]="activeTab === 'poems'"
+        [class.text-slate-400]="activeTab !== 'poems'"
+        [class.hover:text-slate-200]="activeTab !== 'poems'"
+        class="px-8 py-3 rounded-xl font-bold transition-all duration-300">
+        <div class="flex items-center gap-2">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          Interactive Courses
+        </div>
+      </button>
+      <button 
+        (click)="activeTab = 'analysis'"
+        [class.bg-gradient-to-r]="activeTab === 'analysis'"
+        [class.from-indigo-500]="activeTab === 'analysis'"
+        [class.to-purple-600]="activeTab === 'analysis'"
+        [class.text-white]="activeTab === 'analysis'"
+        [class.shadow-md]="activeTab === 'analysis'"
+        [class.text-slate-400]="activeTab !== 'analysis'"
+        [class.hover:text-slate-200]="activeTab !== 'analysis'"
+        class="px-8 py-3 rounded-xl font-bold transition-all duration-300">
+        <div class="flex items-center gap-2">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253"></path></svg>
+          Master Analysis
+        </div>
+      </button>
+    </div>
+  </div>
+
+  <!-- Interactive Poems Tab -->
+  <div *ngIf="activeTab === 'poems'" class="animate-fade-in">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+      
+      <!-- Poem 87 Card -->
+      <a [routerLink]="['/course', 87]" class="group relative bg-slate-800/40 border border-slate-700/50 rounded-3xl overflow-hidden shadow-xl hover:shadow-[0_0_40px_rgba(245,158,11,0.15)] transition-all duration-500 hover:-translate-y-1 block">
+        <div class="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        <div class="aspect-video bg-slate-900 relative">
+          <div class="absolute inset-0 flex items-center justify-center">
+            <div class="w-16 h-16 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center group-hover:scale-110 group-hover:bg-amber-500/20 transition-all duration-300">
+              <svg class="w-8 h-8 text-white ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+          </div>
+          <!-- Placeholder for thumbnail -->
+          <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent"></div>
+        </div>
+        <div class="p-8 relative z-10">
+          <div class="flex justify-between items-start mb-4">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 text-amber-400 text-xs font-bold uppercase tracking-wider border border-amber-500/20">
+              <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span> Poem 87
+            </span>
+            <span class="text-slate-400 text-sm font-medium">Avvaiyar</span>
+          </div>
+          <h3 class="text-2xl font-bold text-white mb-2 group-hover:text-amber-400 transition-colors">தேர் செய்யும் தச்சன்</h3>
+          <p class="text-slate-400 line-clamp-2">Experience this beautiful Sangam poem with AI-generated singing and deep dive into the RAG powered analysis.</p>
+        </div>
+      </a>
+
+      <!-- Poem 101 Card -->
+      <a [routerLink]="['/course', 101]" class="group relative bg-slate-800/40 border border-slate-700/50 rounded-3xl overflow-hidden shadow-xl hover:shadow-[0_0_40px_rgba(245,158,11,0.15)] transition-all duration-500 hover:-translate-y-1 block">
+        <div class="absolute inset-0 bg-gradient-to-br from-orange-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        <div class="aspect-video bg-slate-900 relative">
+          <div class="absolute inset-0 flex items-center justify-center">
+            <div class="w-16 h-16 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center group-hover:scale-110 group-hover:bg-orange-500/20 transition-all duration-300">
+              <svg class="w-8 h-8 text-white ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+          </div>
+          <!-- Placeholder for thumbnail -->
+          <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent"></div>
+        </div>
+        <div class="p-8 relative z-10">
+          <div class="flex justify-between items-start mb-4">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-orange-500/10 text-orange-400 text-xs font-bold uppercase tracking-wider border border-orange-500/20">
+              <span class="w-1.5 h-1.5 rounded-full bg-orange-500"></span> Poem 101
+            </span>
+            <span class="text-slate-400 text-sm font-medium">Avvaiyar</span>
+          </div>
+          <h3 class="text-2xl font-bold text-white mb-2 group-hover:text-orange-400 transition-colors">அதியமான் நெடுமான் அஞ்சி</h3>
+          <p class="text-slate-400 line-clamp-2">Listen to the praise of Athiyaman and explore the interactive breakdown of the poem's historical context.</p>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- Analysis Tab -->
+  <div *ngIf="activeTab === 'analysis'" class="animate-fade-in w-full max-w-7xl mx-auto">
+    <div class="bg-slate-800/40 border border-slate-700/50 rounded-[2.5rem] p-8 md:p-16 shadow-2xl backdrop-blur-sm">
+      
+      <div class="prose prose-invert prose-amber max-w-none">
+        
+        <!-- Introduction -->
+        <h2 class="text-3xl font-bold text-amber-400 mb-6">புறநானூறு - ஓர் அறிமுகம்</h2>
+        <p class="text-slate-300 text-lg leading-relaxed mb-4">
+          புறநானூறு 400 புறப் பாடல்களைக் கொண்டது. புறம் என்பது எல்லாராலும் அனுபவித்து உணரப்பட்டு இஃது இவ்வாறு இருந்தது என்று பிறர்க்கும் கூறத்தக்கதாக இருக்கும் பொருள் ஆகும். புறத்தில் அறமும் பொருளும் அடங்கும்.
+        </p>
+        <ul class="text-slate-300 list-disc pl-5 mb-8 space-y-2">
+          <li>புறநானூற்றின் பாடல்கள் அகவற்பாவால் அமைந்துள்ளன.</li>
+          <li>புறநானூற்றின் வேறு பெயர்கள் - புறப்பாட்டு, புறம், புறம்புநானூறு.</li>
+        </ul>
+
+        <div class="my-12 border-t border-slate-700/60"></div>
+
+        <!-- Section 1: Moovendhargal -->
+        <h3 class="text-3xl font-bold text-amber-400 mb-8">மூவேந்தர்கள்</h3>
+        
+        <div class="space-y-10">
+          <!-- Chera -->
+          <div class="bg-slate-900/50 rounded-2xl p-8 border border-indigo-500/30 shadow-[0_0_15px_rgba(99,102,241,0.1)]">
+            <h4 class="text-2xl font-bold text-indigo-400 mb-4 flex items-center gap-3">
+              <span class="w-10 h-10 rounded-xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center text-lg">1</span>
+              சேர மன்னர்கள்
+            </h4>
+            <p class="text-slate-300 mb-4">புறநானூற்றில் மூவேந்தர்களில் சேர மன்னர்களைப் பற்றி மொத்தம் 27 பாடல்கள் இடம்பெற்றுள்ளன. அவற்றின் விவரம் பின்வருமாறு:</p>
+            
+            <h5 class="text-lg font-semibold text-slate-200 mt-6 mb-3 border-b border-slate-700 pb-2">புலவர்கள் பாடியது</h5>
+            <ul class="space-y-3 text-slate-300 list-disc pl-5">
+              <li><strong class="text-amber-300">சேரமான் பெருஞ்சோற்று உதியன் சேரலாதன்:</strong> பாடல் எண் 2 (பாடியவர்: முரஞ்சியூர் முடிநாகராயர்)</li>
+              <li><strong class="text-amber-300">சேரமான் அந்துவஞ்சேரல் இரும்பொறை:</strong> பாடல் எண் 13 (பாடியவர்: உறையூர் ஏணிச்சேரி முடமோசியார்)</li>
+              <li><strong class="text-amber-300">சேரமான் செல்வக்கடுங்கோ வாழியாதன்:</strong> பாடல் எண்கள் 8, 14 (பாடியவர்: கபிலர்)</li>
+              <li><strong class="text-amber-300">சேரமான் யானைகட்சேய் மாந்தரஞ்சேரல் இரும்பொறை:</strong> பாடல் எண்கள் 17, 20, 22, 53, 229 (பாடியவர்கள்: குறுங்கோழியூர் கிழார், பொருந்தில் இளங்கீரனார், கூடலூர் கிழார்)</li>
+              <li><strong class="text-amber-300">சேரமான் கோக்கோதை மார்பன்:</strong> பாடல் எண்கள் 48, 49 (பாடியவர்: பொய்கையார்)</li>
+              <li><strong class="text-amber-300">சேரமான் தகடூர் எறிந்த பெருஞ்சேரல் இரும்பொறை:</strong> பாடல் எண் 50 (பாடியவர்: மோசிகீரனார்)</li>
+              <li><strong class="text-amber-300">சேரமான் குட்டுவன் கோதை:</strong> பாடல் எண் 54 (பாடியவர்: பரணர்)</li>
+              <li><strong class="text-amber-300">சேரமான் குடக்கோ நெடுஞ்சேரலாதன்:</strong> பாடல் எண்கள் 62, 63, 368 (பாடியவர்கள்: கழாத்தலையார், பரணர்)</li>
+              <li><strong class="text-amber-300">சேரமான் மாரிவெண்கோ:</strong> பாடல் எண் 367 (பாடியவர்: ஔவையார் - மூவேந்தர்களும் ஒருசேர அமர்ந்திருந்த போது பாடியது)</li>
+              <li><strong class="text-amber-300">சேரமான் சிக்கற்பள்ளித் துஞ்சிய செல்வக்கடுங்கோ வாழியாதன்:</strong> பாடல் எண் 387 (பாடியவர்: குண்டுகட் பாலியாதனார்)</li>
+              <li><strong class="text-amber-300">சேரமான் வஞ்சன்:</strong> பாடல் எண் 398 (பாடியவர்: திருத்தாமனார்)</li>
+              <li><strong class="text-amber-300">சேரமான் கருவூரேறிய ஒள்வாள் கோப்பெருஞ்சேரல் இரும்பொறை:</strong> பாடல் எண் 5 (பாடியவர்: நரிவெரூஉத்தலையார்)</li>
+            </ul>
+
+            <h5 class="text-lg font-semibold text-slate-200 mt-6 mb-3 border-b border-slate-700 pb-2">மன்னர்கள் தாங்களாகவே பாடிய பாடல்கள்</h5>
+            <p class="text-slate-300 mb-3">புறநானூற்றில் பிற புலவர்கள் பாடியது மட்டுமின்றி, இரண்டு சேர மன்னர்கள் நேரடியாகப் பாடிய பாடல்களும் தொகுக்கப்பட்டுள்ளன:</p>
+            <ul class="space-y-3 text-slate-300 list-disc pl-5">
+              <li><strong class="text-emerald-300">சேரமான் பாலை பாடிய பெருங்கடுங்கோ:</strong> பாடல் எண்கள் 11, 282</li>
+              <li><strong class="text-emerald-300">சேரமான் கணைக்கால் இரும்பொறை:</strong> பாடல் எண் 74 (சிறையில் தண்ணீர் தாமதமாகக் கிடைத்ததால் மானம் கருதி உயிர்விடும் முன் பாடிய வரலாற்றுச் சிறப்புமிக்க பாடல்)</li>
+              <li><strong class="text-emerald-300">சேரமான் கோட்டம்பலத்துத் துஞ்சிய மாக்கோதை:</strong> பாடல் எண் 245 (தன் மனைவி இறந்த துயரத்தினால் பாடிய இரங்கற்பாடல்)</li>
+            </ul>
+          </div>
+
+          <!-- Chola -->
+          <div class="bg-slate-900/50 rounded-2xl p-8 border border-emerald-500/30 shadow-[0_0_15px_rgba(16,185,129,0.1)]">
+            <h4 class="text-2xl font-bold text-emerald-400 mb-4 flex items-center gap-3">
+              <span class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-lg">2</span>
+              சோழ மன்னர்கள்
+            </h4>
+            <p class="text-slate-300 mb-4">புறநானூற்றில் சோழ மன்னர்களின் கொடை, வீரம் மற்றும் வஞ்சினங்கள் பல பாடல்களில் பதிவு செய்யப்பட்டுள்ளன:</p>
+            
+            <ul class="space-y-4 text-slate-300 list-disc pl-5">
+              <li>
+                <strong class="text-amber-300 text-lg">சோழன் நலங்கிள்ளி:</strong> பாடல் எண்கள் 27, 28, 29, 30, 31, 32, 33, 45, 68, 225, 382, 400 (புலவர்கள் பாடியவை).
+                <div class="mt-2 pl-4 border-l-2 border-slate-700 text-slate-400">மன்னனே பாடியவை: பாடல் எண்கள் 73, 75 (தன் வலிமையை எள்ளிய பகைவரை வஞ்சினம் கூறி பாடியது)</div>
+              </li>
+              <li>
+                <strong class="text-amber-300 text-lg">சோழன் குளமுற்றத்துத் துஞ்சிய கிள்ளிவளவன்:</strong> இவனைப் பற்றி அதிகபட்சமாக 19 பாடல்கள் உள்ளன (எ.கா: 34, 35, 36, 37, 38, 39, 40, 41, 42, 46, 47, 69, 70, 226, 227, 228).
+                <div class="mt-2 pl-4 border-l-2 border-slate-700 text-slate-400">மன்னனே பாடியது: பாடல் எண் 173 (தன் நண்பன் சிறுகுடி பண்ணனைப் பாராட்டிப் பாடியது)</div>
+              </li>
+              <li>
+                <strong class="text-amber-300 text-lg">சோழன் கோப்பெருஞ்சோழன்:</strong> பாடல் எண்கள் 212, 213, 217, 218, 219, 220, 221, 222, 223 (புலவர்கள் பாடியது).
+                <div class="mt-2 pl-4 border-l-2 border-slate-700 text-slate-400">மன்னனே பாடியவை: பாடல் எண்கள் 214, 215, 216 (மக்களுடன் ஏற்பட்ட பகை மற்றும் வடக்கிருத்தல் குறித்துப் பாடியது)</div>
+              </li>
+              <li><strong class="text-amber-300">சோழன் கரிகாற் பெருவளத்தான்:</strong> பாடல் எண்கள் 7, 66, 224 (பாடியவர்கள்: கருங்குழல் ஆதனார், வெண்ணிக் குயத்தியார்)</li>
+              <li><strong class="text-amber-300">சோழன் உருவப்பஃறேர் இளஞ்சேட் சென்னி:</strong> பாடல் எண்கள் 4, 266</li>
+              <li><strong class="text-amber-300">சோழன் இராசசூயம் வேட்ட பெருநற்கிள்ளி:</strong> பாடல் எண்கள் 16, 367, 377</li>
+              <li><strong class="text-amber-300">சோழன் நெய்தலங்கானல் இளஞ்சேட் சென்னி:</strong> பாடல் எண் 10</li>
+              <li><strong class="text-amber-300">சோழன் நல்லுருத்திரன்:</strong> பாடல் எண் 190 (மன்னனே பாடிய வாழ்வியல் தத்துவப் பாடல்)</li>
+            </ul>
+          </div>
+
+          <!-- Pandya -->
+          <div class="bg-slate-900/50 rounded-2xl p-8 border border-rose-500/30 shadow-[0_0_15px_rgba(244,63,94,0.1)]">
+            <h4 class="text-2xl font-bold text-rose-400 mb-4 flex items-center gap-3">
+              <span class="w-10 h-10 rounded-xl bg-rose-500/20 text-rose-400 flex items-center justify-center text-lg">3</span>
+              பாண்டிய மன்னர்கள்
+            </h4>
+            <p class="text-slate-300 mb-4">பாண்டியர்களின் தமிழ் வளர்த்த மரபும், போர் ஆற்றலும் புறநானூற்றில் ஆவணப்படுத்தப்பட்டுள்ளன:</p>
+            
+            <ul class="space-y-4 text-slate-300 list-disc pl-5">
+              <li>
+                <strong class="text-amber-300 text-lg">பாண்டியன் தலையாலங்கானத்துச் செருவென்ற நெடுஞ்செழியன்:</strong> பாடல் எண்கள் 23, 24, 25, 26, 371, 372 (புலவர்கள் பாடியவை).
+                <div class="mt-2 pl-4 border-l-2 border-slate-700 text-slate-400">மன்னனே பாடியது: பாடல் எண் 72 (பகைவர்களை வீழ்த்தாவிட்டால் என் நாட்டைப் புலவர்கள் பாடாது ஒழியட்டும் எனப் பாடிய புகழ்பெற்ற வஞ்சினப் பாடல்)</div>
+              </li>
+              <li><strong class="text-amber-300">பாண்டியன் பல்யாகசாலை முதுகுடுமிப் பெருவழுதி:</strong> பாடல் எண்கள் 6, 9, 12, 15, 64 (பாடியவர்கள்: நெட்டிமையார், காரிகிழார், நெடும்பல்லியத்தனார்)</li>
+              <li>
+                <strong class="text-amber-300 text-lg">பாண்டியன் அறிவுடை நம்பி:</strong> பாடல் எண்கள் 184 (பிசிராந்தையார் பாடிய அறிவுரைப் பாடல் - வரி வசூலிக்கும் முறை பற்றியது).
+                <div class="mt-2 pl-4 border-l-2 border-slate-700 text-slate-400">மன்னனே பாடியது: பாடல் எண் 188 (மக்கட்பேறு இல்லாதவர் வாழ்வு பயனற்றது என்று பாடிய பாடல்)</div>
+              </li>
+              <li>
+                <strong class="text-amber-300 text-lg">பாண்டியன் ஒல்லையூர் தந்த பூதப்பாண்டியன்:</strong> பாடல் எண் 247 (புலவர் பேரெயின் முறுவலார் பாடியது).
+                <div class="mt-2 pl-4 border-l-2 border-slate-700 text-slate-400">மன்னனே பாடியது: பாடல் எண் 71 (பகைவரை வெல்லாவிடின் என் மனைவி பிரியட்டும் என வஞ்சினம் உரைத்தது)</div>
+              </li>
+              <li><strong class="text-amber-300">பூதப்பாண்டியன் தேவி பெருங்கோப்பெண்டு:</strong> பாடல் எண் 246 (மன்னனின் மனைவி தீப்பாயும் முன் பாடியது)</li>
+              <li><strong class="text-amber-300">பாண்டியன் கடலுள் மாய்ந்த இளம்பெருவழுதி:</strong> பாடல் எண் 182 (மன்னனே பாடிய "உண்டாலம்ம இவ்வுலகம்..." என்ற புகழ்பெற்ற மனிதநேயப் பாடல்)</li>
+              <li><strong class="text-amber-300">பாண்டியன் ஆரியப் படைகடந்த நெடுஞ்செழியன்:</strong> பாடல் எண் 183 (மன்னனே பாடிய "உற்றுழி உதவியும் உறுபொருள் கொடுத்தும்..." என்ற கல்வியின் சிறப்பைக் கூறும் உலகப் புகழ்பெற்ற பாடல்)</li>
+              <li><strong class="text-amber-300">பாண்டியன் கருங்கை ஒள்வாள் பெரும்பெயர் வழுதி:</strong> பாடல் எண் 3 (பாடியவர்: இரும்பிடர்தலையார்)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="my-10 border-t border-slate-700"></div>
+
+        <!-- Section 2: Vallalgal -->
+        <h3 class="text-3xl font-bold text-amber-400 mb-6">கடையெழு வள்ளல்கள்</h3>
+        <p class="text-slate-300 mb-8">சங்க காலத்தில் மூவேந்தர்களுக்கு இணையாகத் தங்களின் கொடைத் திறத்தால் புகழ் பெற்ற கடையெழு வள்ளல்களைப் பற்றிய பல வரலாற்றுச் செய்திகள் இப்பாடல்களில் இடம்பெற்றுள்ளன.</p>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 hover:border-amber-500/50 transition-colors">
+            <h4 class="text-xl font-bold text-amber-400 mb-2">1. பாரி <span class="text-sm text-slate-400 font-normal">(பறம்பு மலைத் தலைவன்)</span></h4>
+            <p class="text-slate-300 text-sm mb-3">மயிலுக்குப் போர்வை தந்த பேகனைப் போல, முல்லைக்குத் தேர் கொடுத்த வள்ளல் பாரி ஆவார். பாரி மற்றும் அவரது பறம்பு மலை பற்றிப் பல பாடல்கள் உள்ளன.</p>
+            <div class="text-xs text-slate-400 bg-slate-900/80 p-3 rounded-lg">
+              <p><strong>பாடல் எண்கள்:</strong> 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 236</p>
+              <p class="mt-1"><strong>முக்கியப் புலவர்கள்:</strong> கபிலர், பாரி மகளிர்</p>
+            </div>
+          </div>
+          
+          <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 hover:border-amber-500/50 transition-colors">
+            <h4 class="text-xl font-bold text-amber-400 mb-2">2. பேகன் <span class="text-sm text-slate-400 font-normal">(வையாவிக் கோப்பெரும்பேகன்)</span></h4>
+            <p class="text-slate-300 text-sm mb-3">மழை மேகம் என்று நினைத்து ஆடிய மயிலின் குளிரைப் போக்கத் தன் போர்வையைக் கொடுத்த கொடை உள்ளம் கொண்டவர்.</p>
+            <div class="text-xs text-slate-400 bg-slate-900/80 p-3 rounded-lg">
+              <p><strong>பாடல் எண்கள்:</strong> 141, 142, 143, 144, 145, 146, 147</p>
+              <p class="mt-1"><strong>முக்கியப் புலவர்கள்:</strong> பரணர், கபிலர், அரிசில் கிழார், பெருங்குன்றூர் கிழார்</p>
+            </div>
+          </div>
+
+          <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 hover:border-amber-500/50 transition-colors">
+            <h4 class="text-xl font-bold text-amber-400 mb-2">3. காரி <span class="text-sm text-slate-400 font-normal">(மலையமான் திருமுடிக்காரி)</span></h4>
+            <p class="text-slate-300 text-sm mb-3">முள்ளூர் மலையின் தலைவன். போர்க்களத்தில் வீரமும், இரவலர்களுக்குத் தேர்களையும் குதிரைகளையும் வாரி வழங்கும் கொடைத் குணமும் கொண்டவர்.</p>
+            <div class="text-xs text-slate-400 bg-slate-900/80 p-3 rounded-lg">
+              <p><strong>பாடல் எண்கள்:</strong> 121, 122, 123, 124, 125, 126</p>
+              <p class="mt-1"><strong>முக்கியப் புலவர்கள்:</strong> கபிலர், மாறோக்கத்து நப்பசலையார், பெருஞ்சித்திரனார்</p>
+            </div>
+          </div>
+
+          <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 hover:border-amber-500/50 transition-colors">
+            <h4 class="text-xl font-bold text-amber-400 mb-2">4. ஓரி <span class="text-sm text-slate-400 font-normal">(வல்வில் ஓரி)</span></h4>
+            <p class="text-slate-300 text-sm mb-3">கொல்லி மலையின் தலைவன். ஒரே அம்பால் யானை, புலி, கலைமான், பன்றி, உடும்பு ஆகிய ஐந்தையும் துளைத்த வில்லாற்றல் மிக்கவர்.</p>
+            <div class="text-xs text-slate-400 bg-slate-900/80 p-3 rounded-lg">
+              <p><strong>பாடல் எண்கள்:</strong> 152, 153, 158</p>
+              <p class="mt-1"><strong>முக்கியப் புலவர்கள்:</strong> வன்பரணர், கழைதின் யானையார்</p>
+            </div>
+          </div>
+
+          <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 hover:border-amber-500/50 transition-colors">
+            <h4 class="text-xl font-bold text-amber-400 mb-2">5. ஆய் <span class="text-sm text-slate-400 font-normal">(ஆய் அண்டிரன்)</span></h4>
+            <p class="text-slate-300 text-sm mb-3">பொதிய மலையை ஆண்ட குறுநில மன்னன். நீல நாகம் தனக்கு அளித்த அரிய கலிங்கத்தை (ஆடையை) சிவபெருமானுக்கு அளித்து மகிழ்ந்தவர்.</p>
+            <div class="text-xs text-slate-400 bg-slate-900/80 p-3 rounded-lg">
+              <p><strong>பாடல் எண்கள்:</strong> 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 240, 241</p>
+              <p class="mt-1"><strong>முக்கியப் புலவர்:</strong> உறையூர் ஏணிச்சேரி முடமோசியார்</p>
+            </div>
+          </div>
+
+          <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 hover:border-amber-500/50 transition-colors">
+            <h4 class="text-xl font-bold text-amber-400 mb-2">6. அதியமான் <span class="text-sm text-slate-400 font-normal">(நெடுமான் அஞ்சி)</span></h4>
+            <p class="text-slate-300 text-sm mb-3">தகடூரை (தர்மபுரி) ஆண்ட மன்னன். மரணத்தைத் தவிர்க்கும் அரிய கருநெல்லிக்கனியைத் தான் உண்ணாமல், தமிழின் ஆயுள் பெருக ஔவையாருக்கு ஈந்தவர்.</p>
+            <div class="text-xs text-slate-400 bg-slate-900/80 p-3 rounded-lg">
+              <p><strong>பாடல் எண்கள்:</strong> 87-104, 231, 232, 235, 315, 390</p>
+              <p class="mt-1"><strong>முக்கியப் புலவர்:</strong> ஔவையார்</p>
+            </div>
+          </div>
+
+          <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 hover:border-amber-500/50 transition-colors">
+            <h4 class="text-xl font-bold text-amber-400 mb-2">7. நள்ளி <span class="text-sm text-slate-400 font-normal">(கண்டீரக்கோப் பெருநள்ளி)</span></h4>
+            <p class="text-slate-300 text-sm mb-3">தோட்டி மலையின் தலைவன். தன்னிடம் பொருள் கேட்டு வரும் இரவலர்களுக்கு, அவர்கள் தகுதி அறியாமல் தன்னிடம் உள்ள அத்தனையையும் அள்ளித் தரும் குணம் கொண்டவர்.</p>
+            <div class="text-xs text-slate-400 bg-slate-900/80 p-3 rounded-lg">
+              <p><strong>பாடல் எண்கள்:</strong> 148, 149, 150</p>
+              <p class="mt-1"><strong>முக்கியப் புலவர்:</strong> வன்பரணர்</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="my-10 border-t border-slate-700"></div>
+
+        <!-- Section 3: Other Kings -->
+        <h3 class="text-3xl font-bold text-amber-400 mb-6">பிற புகழ்பெற்ற குறுநில மன்னர்கள்</h3>
+        <p class="text-slate-300 mb-8">இவர்கள் மூவேந்தர்களோ, கடையெழு வள்ளல்களோ அல்ல என்றாலும், தங்களின் ஈகைக் குணத்தாலும் தமிழ்ப் பற்றாலும் கடையெழு வள்ளல்களுக்கு இணையாகப் போற்றப்படுபவர்கள் ஆவர்.</p>
+        
+        <div class="space-y-6">
+          <div class="bg-slate-800/80 p-6 rounded-2xl border-l-4 border-l-indigo-500">
+            <h4 class="text-xl font-bold text-white mb-2">1. குமணன் <span class="text-sm text-slate-400 font-normal">(முதிர மலைத் தலைவன்)</span></h4>
+            <p class="text-slate-300 text-sm mb-2">தன் தம்பி அரசைக் கவர்ந்துகொண்டு தலைமறைவாக வாழ வைத்த போதும், தன்னிடம் பரிசு கேட்டு வந்த பெருஞ்சித்திரனாருக்கு கொடுக்கப் பொருள் இல்லாததால், தன் தலையை வெட்டிச் சென்று தம்பியிடம் கொடுத்துப் பரிசு பெறுமாறு தன் வாளையே கொடுத்த உன்னதக் கொடையாளி.</p>
+            <p class="text-xs text-slate-400"><strong>பாடல் எண்கள்:</strong> 158-165 | <strong>முக்கியப் புலவர்கள்:</strong> பெருஞ்சித்திரனார், பெருந்தலைச்சாத்தனார்.</p>
+          </div>
+
+          <div class="bg-slate-800/80 p-6 rounded-2xl border-l-4 border-l-emerald-500">
+            <h4 class="text-xl font-bold text-white mb-2">2. நாஞ்சில் வள்ளுவன் <span class="text-sm text-slate-400 font-normal">(நாஞ்சில் மலைத் தலைவன்)</span></h4>
+            <p class="text-slate-300 text-sm mb-2">நாஞ்சில் நாட்டை ஆண்ட மன்னன். தன்னிடம் சிறிய பாடல் பாடி வரும் எளிய இரவலர்களுக்கும் பெரிய யானைகளைப் பரிசாக வழங்கும் அளவற்ற கொடை குணம் கொண்டவர்.</p>
+            <p class="text-xs text-slate-400"><strong>பாடல் எண்கள்:</strong> 137-140 | <strong>முக்கியப் புலவர்கள்:</strong> ஒருசிறைப் பெரியனார், மருதன் இளநாகனார், ஔவையார்.</p>
+          </div>
+
+          <div class="bg-slate-800/80 p-6 rounded-2xl border-l-4 border-l-rose-500">
+            <h4 class="text-xl font-bold text-white mb-2">3. இளவிச்சிக்கோ மற்றும் இளங்கண்டீரக்கோ</h4>
+            <p class="text-slate-300 text-sm mb-2">இவர்கள் இருவரும் முறையே விச்சி மலை மற்றும் தோட்டி மலையை ஆண்ட குறுநில மன்னர்கள் ஆவர். வன்பரணர் மற்றும் பெருந்தலைச்சாத்தனார் ஆகிய புலவர்களால் பாடப்பட்டவர்கள்.</p>
+            <p class="text-xs text-slate-400"><strong>பாடல் எண்கள்:</strong> 151, 157</p>
+          </div>
+
+          <div class="bg-slate-800/80 p-6 rounded-2xl border-l-4 border-l-amber-500">
+            <h4 class="text-xl font-bold text-white mb-2">4. ஓய்மான நாட்டு நல்லியக்கோடன்</h4>
+            <p class="text-slate-300 text-sm mb-2">ஓய்மான நாட்டை (திண்டிவனம் பகுதி) ஆண்ட மன்னன். கடையெழு வள்ளல்களின் காலத்திற்குப் பிறகு தமிழ் வளர்த்த பெருமை இவருக்கு உண்டு (சிறுபாணாற்றுப்படையின் பாட்டுடைத் தலைவனும் இவரே).</p>
+            <p class="text-xs text-slate-400"><strong>பாடல் எண்:</strong> 176 | <strong>பாடிய புலவர்:</strong> புறத்திணை நன்னாகனார்.</p>
+          </div>
+        </div>
+
+        <div class="my-12 border-t border-slate-700"></div>
+
+        <!-- Section 4: Poets Table -->
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+          <div>
+            <h3 class="text-3xl font-bold text-amber-400 mb-2">புறநானூறு பாடிய புலவர்களும் பாடல் எண்களும்</h3>
+            <p class="text-slate-400">மொத்த புலவர்கள் / பிரிவுகள்: 161</p>
+          </div>
+          
+          <!-- Search Bar -->
+          <div class="relative w-full md:w-72">
+            <input 
+              type="text" 
+              [(ngModel)]="searchQuery" 
+              (ngModelChange)="onSearchChange()"
+              placeholder="புலவர் அல்லது பாடல் எண் தேடுக..." 
+              class="w-full bg-slate-900/80 border border-slate-700 rounded-xl py-3 pl-11 pr-4 text-slate-200 focus:outline-none focus:border-amber-500/50 focus:ring-1 focus:ring-amber-500/50 transition-all placeholder:text-slate-500"
+            >
+            <svg class="w-5 h-5 text-slate-500 absolute left-4 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+          </div>
+        </div>
+        
+        <div class="bg-slate-900/80 rounded-2xl border border-slate-700/50 overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead class="bg-slate-800">
+                <tr>
+                  <th class="py-4 px-6 text-slate-300 font-bold border-b border-slate-700 whitespace-nowrap">எண்</th>
+                  <th class="py-4 px-6 text-slate-300 font-bold border-b border-slate-700 whitespace-nowrap">பாடிய புலவர்</th>
+                  <th class="py-4 px-6 text-slate-300 font-bold border-b border-slate-700">பாடல் எண்கள்</th>
+                  <th class="py-4 px-6 text-slate-300 font-bold border-b border-slate-700 whitespace-nowrap">மொத்தம்</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-700/50">
+                <tr *ngFor="let p of paginatedPoets" class="hover:bg-slate-800/50 transition-colors">
+                  <td class="py-4 px-6 text-slate-400">{{p.sno}}</td>
+                  <td class="py-4 px-6 text-amber-400 font-medium">{{p.poet}}</td>
+                  <td class="py-4 px-6 text-slate-300 text-sm leading-relaxed">{{p.songs}}</td>
+                  <td class="py-4 px-6 text-emerald-400 font-bold text-center">{{p.total}}</td>
+                </tr>
+                <tr *ngIf="paginatedPoets.length === 0">
+                  <td colspan="4" class="py-8 text-center text-slate-500">
+                    தேடலுக்குப் பொருத்தமான முடிவுகள் இல்லை. (No results found)
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          
+          <!-- Pagination Controls -->
+          <div class="bg-slate-800/50 px-6 py-4 border-t border-slate-700/50 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="text-slate-400 text-sm">
+              Showing <span class="text-amber-400 font-medium">{{filteredPoets.length > 0 ? (currentPage - 1) * itemsPerPage + 1 : 0}}</span> 
+              to <span class="text-amber-400 font-medium">{{Math.min(currentPage * itemsPerPage, filteredPoets.length)}}</span> 
+              of <span class="text-white font-medium">{{filteredPoets.length}}</span> entries
+            </div>
+            <div class="flex items-center gap-2">
+              <button 
+                (click)="prevPage()" 
+                [disabled]="currentPage === 1"
+                class="p-2 rounded-lg border border-slate-600 text-slate-300 hover:bg-slate-700 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                title="Previous Page"
+              >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+              </button>
+              
+              <div class="px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 font-medium">
+                Page {{currentPage}} of {{totalPages}}
+              </div>
+              
+              <button 
+                (click)="nextPage()" 
+                [disabled]="currentPage === totalPages"
+                class="p-2 rounded-lg border border-slate-600 text-slate-300 hover:bg-slate-700 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                title="Next Page"
+              >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

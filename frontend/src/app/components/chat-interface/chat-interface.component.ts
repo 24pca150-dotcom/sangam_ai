@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, AfterViewChecked, OnInit } from '@angular/core';
+import { Component, ViewChild, ElementRef, AfterViewChecked, OnInit, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../services/api.service';
@@ -20,10 +20,11 @@ interface ChatMessage {
 })
 export class ChatInterfaceComponent implements OnInit, AfterViewChecked {
   @ViewChild('chatContainer') private chatContainer!: ElementRef;
+  @Input() isEmbedded: boolean = false;
   
   question = '';
   
-  defaultGreeting: ChatMessage = {role: 'assistant', content: 'Vanakkam! I am your Sangam AI assistant. Ask me anything about Purananuru, Thinai, or classical Tamil literature!'};
+  defaultGreeting: ChatMessage = {role: 'assistant', content: 'வணக்கம்! நான் உங்கள் \'அறிக புறநானூறு\' AI தளம். புறநானூறு பற்றிய உங்கள் கேள்விகளை என்னிடம் கேட்கலாம்!'};
   messages: ChatMessage[] = [];
   
   starterQuestions: {id: number, question: string}[] = [];
@@ -81,6 +82,13 @@ export class ChatInterfaceComponent implements OnInit, AfterViewChecked {
     if (saved) {
       try {
         this.messages = JSON.parse(saved);
+        // Force update the old greeting to the new one if it exists
+        if (this.messages.length > 0 && this.messages[0].role === 'assistant') {
+          if (this.messages[0].content.includes('Sangam AI assistant') || this.messages[0].content.includes('Vanakkam!')) {
+            this.messages[0].content = this.defaultGreeting.content;
+            this.saveChatHistory();
+          }
+        }
       } catch (e) {
         this.messages = [{ ...this.defaultGreeting }];
       }
