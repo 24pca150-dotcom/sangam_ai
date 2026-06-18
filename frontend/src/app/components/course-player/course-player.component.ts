@@ -17,13 +17,13 @@ export class CoursePlayerComponent implements OnInit {
   poemId: string | null = null;
   videoUrl: string = '';
 
-  constructor(private route: ActivatedRoute, private api: ApiService) {}
+  constructor(private route: ActivatedRoute, private api: ApiService) { }
 
   ngOnInit() {
     this.poemId = this.route.snapshot.paramMap.get('id');
-    
+
     if (this.poemId === '87') {
-      this.videoUrl = 'https://res.cloudinary.com/demo/video/upload/v1692275685/elephants.mp4';
+      this.videoUrl = 'https://res.cloudinary.com/dy8bu8suk/video/upload/v1781780294/VID-20260618-WA0007_bs2foy.mp4';
     } else if (this.poemId === '101') {
       this.videoUrl = 'https://res.cloudinary.com/demo/video/upload/v1692275685/sea_turtle.mp4';
     } else {
