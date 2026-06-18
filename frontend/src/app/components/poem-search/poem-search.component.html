@@ -1,12 +1,12 @@
 <div class="max-w-5xl mx-auto mt-6 space-y-6">
   <!-- Search Header -->
-  <div class="bg-slate-800/40 border border-slate-700/50 rounded-3xl p-8 backdrop-blur-sm shadow-xl relative overflow-hidden">
+  <div
+    class="bg-slate-800/40 border border-slate-700/50 rounded-3xl p-8 backdrop-blur-sm shadow-xl relative overflow-hidden">
     <div class="absolute top-0 left-0 w-64 h-64 bg-amber-500/5 rounded-full blur-3xl pointer-events-none"></div>
     <h1 class="text-3xl font-bold text-white mb-6 relative z-10">Search Literature</h1>
-    
+
     <div class="flex gap-4 relative z-10">
-      <input type="text" [(ngModel)]="searchQuery" (keyup.enter)="search()"
-        placeholder="Search by keyword, poet, or theme..."
+      <input type="text" [(ngModel)]="searchQuery" (keyup.enter)="search()" placeholder="Search by Poem number"
         class="flex-1 bg-slate-900/50 border border-slate-600 rounded-xl px-5 py-4 text-white focus:outline-none focus:ring-2 focus:ring-amber-500 shadow-inner">
       <button (click)="search()" [disabled]="loading"
         class="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 disabled:opacity-50 text-slate-900 font-bold px-8 py-4 rounded-xl transition-all shadow-lg">
@@ -18,33 +18,46 @@
 
   <!-- Results Area -->
   <div *ngIf="!loading && results.length > 0" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-    <div *ngFor="let poem of results" class="bg-slate-800/40 border border-slate-700/50 rounded-3xl p-6 backdrop-blur-sm hover:border-amber-500/30 transition-all hover:shadow-lg hover:shadow-amber-500/5 group flex flex-col">
+    <div *ngFor="let poem of results"
+      class="bg-slate-800/40 border border-slate-700/50 rounded-3xl p-6 backdrop-blur-sm hover:border-amber-500/30 transition-all hover:shadow-lg hover:shadow-amber-500/5 group flex flex-col">
       <div class="flex justify-between items-start mb-4">
         <div>
-          <h3 class="text-xl font-bold text-amber-400 group-hover:text-amber-300 transition-colors">{{poem.basic_information.poem_title}}</h3>
-          <p class="text-slate-400 text-sm mt-1">{{poem.basic_information.anthology_name}} • {{poem.basic_information.poet_name}}</p>
+          <h3 class="text-xl font-bold text-amber-400 group-hover:text-amber-300 transition-colors">
+            {{poem.basic_information.poem_title}}</h3>
+          <p class="text-slate-400 text-sm mt-1">{{poem.basic_information.anthology_name}} •
+            {{poem.basic_information.poet_name}}</p>
         </div>
-        <span class="bg-indigo-500/20 text-indigo-300 text-xs px-3 py-1 rounded-full border border-indigo-500/20 font-medium">
+        <span
+          class="bg-indigo-500/20 text-indigo-300 text-xs px-3 py-1 rounded-full border border-indigo-500/20 font-medium">
           {{poem.historical_information.dynasty || 'Sangam Age'}}
         </span>
       </div>
-      
-      <p class="text-slate-300 font-serif leading-relaxed line-clamp-3 mb-6 flex-1 italic border-l-2 border-amber-500/30 pl-4">
+
+      <p
+        class="text-slate-300 font-serif leading-relaxed line-clamp-3 mb-6 flex-1 italic border-l-2 border-amber-500/30 pl-4">
         "{{poem.basic_information.original_tamil_text}}"
       </p>
-      
+
       <div class="mt-auto pt-4 border-t border-slate-700/50">
-        <a [routerLink]="['/poem', poem.basic_information.poem_title]" class="inline-flex items-center text-amber-500 hover:text-amber-400 font-medium transition-colors">
+        <a [routerLink]="['/poem', poem.basic_information.poem_title]"
+          class="inline-flex items-center text-amber-500 hover:text-amber-400 font-medium transition-colors">
           Read Full Analysis
-          <svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+          <svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor"
+            viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+          </svg>
         </a>
       </div>
     </div>
   </div>
 
   <!-- Empty State -->
-  <div *ngIf="!loading && results.length === 0" class="bg-slate-800/20 border border-slate-700/30 rounded-3xl p-16 text-center backdrop-blur-sm">
-    <svg class="mx-auto h-16 w-16 text-slate-500 mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+  <div *ngIf="!loading && results.length === 0"
+    class="bg-slate-800/20 border border-slate-700/30 rounded-3xl p-16 text-center backdrop-blur-sm">
+    <svg class="mx-auto h-16 w-16 text-slate-500 mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+    </svg>
     <p class="text-slate-400 text-lg">No results found or type a query to start.</p>
   </div>
 </div>
