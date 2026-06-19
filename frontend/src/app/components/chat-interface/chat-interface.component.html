@@ -1,15 +1,15 @@
-<div [ngClass]="{'h-full w-full border-0 rounded-none bg-transparent': isEmbedded, 'max-w-6xl mx-auto h-[calc(100vh-8rem)] mt-6 bg-slate-800/40 border border-slate-700/50 rounded-3xl shadow-xl backdrop-blur-sm': !isEmbedded}" class="flex flex-col overflow-hidden">
+<div [ngClass]="{'h-full w-full border-0 rounded-none bg-transparent': isEmbedded, 'max-w-6xl mx-auto h-[calc(100vh-9rem)] sm:h-[calc(100vh-8rem)] mt-2 sm:mt-6 bg-slate-800/40 border border-slate-700/50 rounded-3xl shadow-xl backdrop-blur-sm': !isEmbedded}" class="flex flex-col overflow-hidden">
   
-  <div class="bg-slate-900/50 px-6 py-4 border-b border-slate-700/50 flex items-center justify-between">
-    <div>
-      <h2 class="text-xl font-bold text-white flex items-center gap-2">
-        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-        அறிக புறநானூறு - An interactive conversational AI
+  <div class="bg-slate-900/50 px-4 sm:px-6 py-3 sm:py-4 border-b border-slate-700/50 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0">
+    <div class="w-full sm:w-auto flex-1 mr-2">
+      <h2 class="text-lg sm:text-xl font-bold text-white flex items-start sm:items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 shrink-0 mt-2 sm:mt-0"></span>
+        <span class="whitespace-normal leading-tight">அறிக புறநானூறு - An interactive conversational AI</span>
       </h2>
-      <p class="text-xs text-slate-400 mt-1">RAG-powered conversational engine</p>
+      <p class="text-[10px] sm:text-xs text-slate-400 mt-1 sm:ml-4">RAG-powered conversational engine</p>
     </div>
-    <button (click)="newChat()" class="text-xs font-semibold px-4 py-2 bg-slate-700/50 hover:bg-slate-600 rounded-lg text-slate-200 transition-colors flex items-center gap-2">
-      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+    <button (click)="newChat()" class="text-xs font-semibold px-3 py-1.5 sm:px-4 sm:py-2 bg-slate-700/50 hover:bg-slate-600 rounded-lg text-slate-200 transition-colors flex items-center gap-2 self-end sm:self-auto">
+      <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
       New Chat
     </button>
   </div>
@@ -62,14 +62,14 @@
     </div>
   </div>
 
-  <div class="p-4 bg-slate-900/50 border-t border-slate-700/50">
-    <div class="flex gap-4">
+  <div class="p-3 sm:p-4 bg-slate-900/50 border-t border-slate-700/50">
+    <div class="flex gap-2 sm:gap-4">
       <input type="text" [(ngModel)]="question" (keyup.enter)="sendMessage()" [disabled]="loading"
-        placeholder="Ask a question about Tamil literature..."
-        class="flex-1 bg-slate-800/80 border border-slate-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-amber-500 shadow-inner">
+        placeholder="Ask about Tamil literature..."
+        class="flex-1 w-full min-w-0 bg-slate-800/80 border border-slate-600 rounded-xl px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base text-white focus:outline-none focus:ring-2 focus:ring-amber-500 shadow-inner">
       <button (click)="sendMessage()" [disabled]="loading || !question.trim()"
-        class="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 disabled:opacity-50 disabled:cursor-not-allowed text-slate-900 font-bold px-6 py-3 rounded-xl transition-all flex items-center gap-2 shadow-[0_0_15px_rgba(245,158,11,0.2)]">
-        <span>Send</span>
+        class="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 disabled:opacity-50 disabled:cursor-not-allowed text-slate-900 font-bold px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl transition-all flex items-center gap-1 sm:gap-2 shadow-[0_0_15px_rgba(245,158,11,0.2)] shrink-0">
+        <span class="hidden sm:inline">Send</span>
         <svg class="w-4 h-4 transform rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
       </button>
     </div>
