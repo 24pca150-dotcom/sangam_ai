@@ -1,0 +1,12 @@
+fastapi
+uvicorn[standard]
+pydantic
+sqlalchemy
+qdrant-client
+langchain-qdrant
+langchain
+langchain-community
+langchain-huggingface
+langchain-groq
+python-dotenv
+psycopg2-binary
