@@ -216,15 +216,28 @@ export class ChatInterfaceComponent implements OnInit, AfterViewChecked {
   fetchStarterQuestions() {
     this.api.getStarterQa().subscribe({
       next: (res) => {
+        let starters: any[] = [];
         if (res && res.length > 0) {
-          const starters = res.map((r: any) => ({ id: r.id, question: r.question }));
-          this.attachStarters(starters);
+          starters = res.map((r: any) => ({ id: r.id, question: r.question }));
+        } else {
+          starters = this.getFallbackStarters();
         }
+        this.attachStarters(starters);
       },
       error: (err) => {
-        console.error('Error fetching starter QA from DB:', err);
+        console.error('Error fetching starter QA:', err);
+        this.attachStarters(this.getFallbackStarters());
       }
     });
+  }
+
+  getFallbackStarters() {
+    return [
+      { id: 0, question: "புறநானூறு 88 ஆம் பாடலை இயற்றியவர் யார்?" },
+      { id: 0, question: "இந்தப் பாடலில் புகழப்படும் மன்னன் யார்?" },
+      { id: 0, question: "இந்தப் பாடலின் theme என்ன?" },
+      { id: 0, question: "'களம்புகல்' என்பதன் பொருள் என்ன?" }
+    ];
   }
 
   attachStarters(starters: any[]) {
@@ -325,5 +338,4 @@ export class ChatInterfaceComponent implements OnInit, AfterViewChecked {
     });
   }
 }
-
 

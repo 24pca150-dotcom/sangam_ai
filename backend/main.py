@@ -1,4 +1,3 @@
-import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from api import router as api_router
@@ -18,7 +17,3 @@ app.include_router(api_router.router, prefix="/api")
 @app.api_route("/", methods=["GET", "HEAD"])
 def root():
     return {"message": "Welcome to Sangam AI API"}
-
-if __name__ == "__main__":
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
-
