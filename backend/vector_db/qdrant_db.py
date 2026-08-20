@@ -103,6 +103,16 @@ def add_to_vector_db(poems_data):
         poet_gender = _g(basic, 'poet_gender', '')
         original_tamil_text = _g(basic, 'original_tamil_text', '')
         
+        # Build clean, readable Tamil poem text from line_by_line_meaning split_line if available
+        clean_poem_lines = []
+        line_by_line = getattr(poem, 'line_by_line_meaning', None)
+        if line_by_line and isinstance(line_by_line, list):
+            for item in line_by_line:
+                if isinstance(item, dict) and 'split_line' in item:
+                    clean_poem_lines.append(item['split_line'].strip())
+        
+        readable_tamil_text = "\n".join(clean_poem_lines) if clean_poem_lines else original_tamil_text
+
         # Build dynamic fields based on what's available
         extra_info = ""
         struct = getattr(poem, 'poem_structure', None)
@@ -123,7 +133,11 @@ def add_to_vector_db(poems_data):
         Poem Title: {poem_title}
         Anthology: {anthology_name}
         Poet: {poet_name} ({poet_gender})
-        Original Tamil: {original_tamil_text}
+        Readable Tamil Poem Text:
+        {readable_tamil_text}
+        
+        Original Sandhi Text: {original_tamil_text}
+
         
         Historical Context: {_g(histo, 'historical_context')}
         Time Period: {_g(histo, 'time_period')}
