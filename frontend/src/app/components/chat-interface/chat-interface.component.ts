@@ -216,28 +216,15 @@ export class ChatInterfaceComponent implements OnInit, AfterViewChecked {
   fetchStarterQuestions() {
     this.api.getStarterQa().subscribe({
       next: (res) => {
-        let starters: any[] = [];
         if (res && res.length > 0) {
-          starters = res.map((r: any) => ({ id: r.id, question: r.question }));
-        } else {
-          starters = this.getFallbackStarters();
+          const starters = res.map((r: any) => ({ id: r.id, question: r.question }));
+          this.attachStarters(starters);
         }
-        this.attachStarters(starters);
       },
       error: (err) => {
-        console.error('Error fetching starter QA:', err);
-        this.attachStarters(this.getFallbackStarters());
+        console.error('Error fetching starter QA from DB:', err);
       }
     });
-  }
-
-  getFallbackStarters() {
-    return [
-      { id: 0, question: "புறநானூறு 88 ஆம் பாடலை இயற்றியவர் யார்?" },
-      { id: 0, question: "இந்தப் பாடலில் புகழப்படும் மன்னன் யார்?" },
-      { id: 0, question: "இந்தப் பாடலின் theme என்ன?" },
-      { id: 0, question: "'களம்புகல்' என்பதன் பொருள் என்ன?" }
-    ];
   }
 
   attachStarters(starters: any[]) {
@@ -261,10 +248,10 @@ export class ChatInterfaceComponent implements OnInit, AfterViewChecked {
 
   sendQuestion(q: string, id?: number) {
     this.question = q;
-    this.sendMessage(id && id > 0 ? id : undefined);
+    this.sendMessage();
   }
 
-  sendMessage(staticQuestionId?: number) {
+  sendMessage() {
     if (!this.question.trim() || this.loading) return;
 
     const session = this.activeSession;
@@ -282,27 +269,7 @@ export class ChatInterfaceComponent implements OnInit, AfterViewChecked {
     this.loading = true;
     this.saveSessions();
 
-    if (staticQuestionId) {
-      this.api.getQaAnswer(staticQuestionId).subscribe({
-        next: (res) => {
-          session.messages.push({
-            role: 'assistant',
-            content: res.answer,
-            suggested_questions: res.related_questions,
-            suggested_question_ids: res.related_question_ids,
-            is_verified_static: true
-          });
-          this.loading = false;
-          this.saveSessions();
-        },
-        error: (err) => {
-          console.error(err);
-          this.fetchAiResponse(userQ);
-        }
-      });
-    } else {
-      this.fetchAiResponse(userQ);
-    }
+    this.fetchAiResponse(userQ);
   }
 
   fetchAiResponse(userQ: string) {
@@ -323,8 +290,7 @@ export class ChatInterfaceComponent implements OnInit, AfterViewChecked {
           content: res.answer,
           sources: res.context_sources,
           suggested_questions: res.suggested_questions,
-          suggested_question_ids: res.suggested_question_ids,
-          is_verified_static: res.is_verified_static
+          suggested_question_ids: res.suggested_question_ids
         });
         this.loading = false;
         this.saveSessions();
@@ -338,4 +304,5 @@ export class ChatInterfaceComponent implements OnInit, AfterViewChecked {
     });
   }
 }
+
 

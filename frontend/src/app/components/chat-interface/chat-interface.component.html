@@ -140,15 +140,7 @@
               {{ msg.content }}
             </div>
             
-            <!-- Verified Static Answer Badge -->
-            <div *ngIf="msg.is_verified_static" class="px-4 pb-3 pt-0">
-              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-emerald-500/20 text-emerald-400 text-[10px] font-bold uppercase tracking-wider border border-emerald-500/30">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-                Verified Answer
-              </span>
-            </div>
+
 
             <!-- Retrieved Context Sources -->
             <div *ngIf="msg.sources && msg.sources.length > 0" class="px-4 pb-4 pt-2 border-t border-slate-700/60 mt-2">
