@@ -162,21 +162,33 @@ def get_qa_answer(question_id: int, db: Session = Depends(get_db)):
 @router.post("/chat", response_model=ChatResponse)
 def chat_with_ai(request: ChatRequest, db: Session = Depends(get_db)):
     try:
-        # 1. Fuzzy String Matching for Highly Similar QA Pair
-        import difflib
+        # 1. Enhanced String & Keyword Matching for QA Pair
+        import difflib, re
+        
+        def clean_str(s: str) -> str:
+            # Remove punctuation, quotes, and symbols
+            return re.sub(r'[^\w\s]', '', s).strip().lower()
+
+        user_q_clean = clean_str(request.question)
+        user_words = [w for w in user_q_clean.split() if len(w) > 1]
         
         all_qas = db.query(PoemQA).all()
         high_confidence_qa = None
         best_ratio = 0.0
         
-        user_q = request.question.strip().lower()
-        
         for qa in all_qas:
-            db_q = qa.question.strip().lower()
-            ratio = difflib.SequenceMatcher(None, user_q, db_q).ratio()
+            db_q_clean = clean_str(qa.question)
+            
+            # Exact clean match or high ratio
+            ratio = difflib.SequenceMatcher(None, user_q_clean, db_q_clean).ratio()
+            
+            # Also check key word overlap (e.g. "ஓம்புமின்" matching "‘ஓம்புமின்’ என்பதன் பொருள் என்ன?")
+            main_keywords = [w for w in re.sub(r'[^\w\s]', '', qa.question).split() if len(w) > 3]
+            keyword_match = any(kw.lower() in user_q_clean for kw in main_keywords) if main_keywords else False
+            
             if ratio > best_ratio:
                 best_ratio = ratio
-                if ratio > 0.75:  # 75% similarity threshold
+                if ratio > 0.60 or (ratio > 0.40 and keyword_match):
                     high_confidence_qa = qa
                     
         if high_confidence_qa:

@@ -73,8 +73,16 @@ def generate_answer(question: str, chat_history: list = None):
     context_text = "\n\n".join([doc.page_content for doc in docs])
     
     # 2. Invoke the LLM with the context, history, and original question
-    response = chain.invoke({"context": context_text, "chat_history": history_str, "input": question})
-    content = response.content
+    content = ""
+    try:
+        response = chain.invoke({"context": context_text, "chat_history": history_str, "input": question})
+        content = response.content
+    except Exception as llm_err:
+        print(f"LLM Invoke error: {llm_err}")
+        if context_text and context_text.strip():
+            content = context_text
+        else:
+            content = "மன்னித்துக்கொள்ளுங்கள், இந்த கேள்விக்கான தகவல் தரவுத்தளத்தில் கண்டறியப்படவில்லை."
     
     # 3. Parse JSON from response
     answer_text = content
