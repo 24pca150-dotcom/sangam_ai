@@ -152,20 +152,11 @@ def get_starter_qa(db: Session = Depends(get_db)):
 import random
 
 def get_related_questions(db: Session, qa: PoemQA):
-    # Try to get next sequential questions (original_id + 1, +2, etc.) to feel more logical
+    # Get questions belonging strictly to the same poem
     related = db.query(PoemQA).filter(
         PoemQA.poem_id == qa.poem_id, 
-        PoemQA.original_id > qa.original_id
+        PoemQA.id != qa.id
     ).order_by(PoemQA.original_id).limit(4).all()
-    
-    # Fallback to random if we reached the end
-    if len(related) < 4:
-        more = db.query(PoemQA).filter(
-            PoemQA.poem_id == qa.poem_id, 
-            PoemQA.id != qa.id,
-            PoemQA.id.notin_([r.id for r in related]) if related else True
-        ).order_by(func.random()).limit(4 - len(related)).all()
-        related.extend(more)
     return related
 
 @router.get("/qa/{question_id}", response_model=dict)
@@ -205,13 +196,13 @@ def chat_with_ai(request: ChatRequest, db: Session = Depends(get_db)):
             # Exact clean match or high ratio
             ratio = difflib.SequenceMatcher(None, user_q_clean, db_q_clean).ratio()
             
-            # Also check key word overlap (e.g. "ஓம்புமின்" matching "‘ஓம்புமின்’ என்பதன் பொருள் என்ன?")
+            # Also check key word overlap
             main_keywords = [w for w in re.sub(r'[^\w\s]', '', qa.question).split() if len(w) > 3]
             keyword_match = any(kw.lower() in user_q_clean for kw in main_keywords) if main_keywords else False
             
             if ratio > best_ratio:
                 best_ratio = ratio
-                if ratio > 0.60 or (ratio > 0.40 and keyword_match):
+                if ratio > 0.65 or (ratio > 0.45 and keyword_match):
                     high_confidence_qa = qa
                     
         if high_confidence_qa:
@@ -224,7 +215,7 @@ def chat_with_ai(request: ChatRequest, db: Session = Depends(get_db)):
                 is_verified_static=True
             )
 
-        # 2. Otherwise fallback to RAG (which will now retrieve both Poem and QA chunks from Chroma DB)
+        # 2. Otherwise query RAG
         result = generate_answer(request.question, request.chat_history)
         
         top_poem_title = result.get("top_poem_title")
@@ -232,15 +223,8 @@ def chat_with_ai(request: ChatRequest, db: Session = Depends(get_db)):
         if top_poem_title:
             poem = db.query(Poem).filter(Poem.poem_title == top_poem_title).first()
             if poem:
-                # Fetch related questions for the poem identified by RAG
+                # Fetch related questions belonging strictly to the matched poem
                 related_qas = db.query(PoemQA).filter(PoemQA.poem_id == poem.id).limit(4).all()
-        
-        # If no poem matched or not enough questions, fallback to random static questions
-        if len(related_qas) < 4:
-            more_qas = db.query(PoemQA).filter(
-                PoemQA.id.notin_([r.id for r in related_qas]) if related_qas else True
-            ).order_by(func.random()).limit(4 - len(related_qas)).all()
-            related_qas.extend(more_qas)
         
         return ChatResponse(
             answer=result["answer"],
@@ -249,6 +233,7 @@ def chat_with_ai(request: ChatRequest, db: Session = Depends(get_db)):
             suggested_question_ids=[r.id for r in related_qas],
             is_verified_static=False
         )
+
     except Exception as e:
         import traceback
         error_details = traceback.format_exc()
