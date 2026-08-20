@@ -248,10 +248,10 @@ export class ChatInterfaceComponent implements OnInit, AfterViewChecked {
 
   sendQuestion(q: string, id?: number) {
     this.question = q;
-    this.sendMessage();
+    this.sendMessage(id && id > 0 ? id : undefined);
   }
 
-  sendMessage() {
+  sendMessage(staticQuestionId?: number) {
     if (!this.question.trim() || this.loading) return;
 
     const session = this.activeSession;
@@ -269,7 +269,27 @@ export class ChatInterfaceComponent implements OnInit, AfterViewChecked {
     this.loading = true;
     this.saveSessions();
 
-    this.fetchAiResponse(userQ);
+    if (staticQuestionId) {
+      this.api.getQaAnswer(staticQuestionId).subscribe({
+        next: (res) => {
+          session.messages.push({
+            role: 'assistant',
+            content: res.answer,
+            suggested_questions: res.related_questions,
+            suggested_question_ids: res.related_question_ids,
+            is_verified_static: true
+          });
+          this.loading = false;
+          this.saveSessions();
+        },
+        error: (err) => {
+          console.error(err);
+          this.fetchAiResponse(userQ);
+        }
+      });
+    } else {
+      this.fetchAiResponse(userQ);
+    }
   }
 
   fetchAiResponse(userQ: string) {
@@ -290,7 +310,8 @@ export class ChatInterfaceComponent implements OnInit, AfterViewChecked {
           content: res.answer,
           sources: res.context_sources,
           suggested_questions: res.suggested_questions,
-          suggested_question_ids: res.suggested_question_ids
+          suggested_question_ids: res.suggested_question_ids,
+          is_verified_static: res.is_verified_static
         });
         this.loading = false;
         this.saveSessions();
