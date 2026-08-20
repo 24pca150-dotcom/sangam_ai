@@ -2,39 +2,33 @@ from langchain_groq import ChatGroq
 from langchain_core.prompts import PromptTemplate
 from vector_db.qdrant_db import vector_store
 import os
+import json
+import re
 from dotenv import load_dotenv
 
 load_dotenv()
 
 # Initialize Groq LLM
-# You need to set GROQ_API_KEY in your .env file
-# Initialize Groq LLM
-# You need to set GROQ_API_KEY in your .env file
 llm = ChatGroq(
-    temperature=0.6,
-    model_name="llama-3.1-8b-instant", 
+    temperature=0.4,
+    model_name="qwen/qwen3.6-27b", 
     api_key=os.getenv("GROQ_API_KEY", "dummy_key_change_me")
 )
 
-import json
-import re
-
 prompt_template = """
-You are a highly accurate Sangam Tamil Literature AI assistant.
-Your goal is to be exceptionally helpful and detailed.
+You are an expert Sangam Tamil Literature AI assistant.
+Answer the user's question clearly, concisely, and accurately in natural Tamil.
 
-Follow these strict rules:
-1. If the user provides a single word or short phrase (e.g., 'உவமை', 'தேர்', 'திணை'), they are asking for its meaning. First, provide a clear, general definition of the word in Tamil using your own knowledge. Then, if the provided Context contains specific examples or usage of this word in the poems, explain that connection as well.
-2. For specific questions about the poems, you MUST use the provided Context to explain thoroughly and accurately.
-3. If the Context does NOT contain the answer to a poem-specific question, you MUST explicitly state that you don't have that information. Do not hallucinate facts about the poems.
-4. DO NOT repeat sentences or get stuck in a loop.
-5. YOU MUST RETURN YOUR RESPONSE AS A VALID JSON OBJECT. Do not include any other text outside the JSON.
-6. The JSON must have exactly one key: "answer" (string).
+Rules:
+1. Provide ONLY a clean, well-formatted Tamil answer.
+2. DO NOT include any debug labels, internal headers (like "Detailed Explanation:", "Static QA Pair:", "Question:", "Answer:").
+3. If the user provides a single word or short term (e.g. 'திங்கள்', 'உவமை', 'தேர்'), explain its meaning clearly in Tamil based on Sangam literature context.
+4. YOU MUST RETURN YOUR RESPONSE AS A VALID JSON OBJECT with exactly one key: "answer".
 
 Output Format:
 ```json
 {{
-  "answer": "your detailed response here..."
+  "answer": "உங்களுடைய தெளிவான தமிழ் பதில்..."
 }}
 ```
 
@@ -51,8 +45,32 @@ Answer:
 """
 prompt = PromptTemplate.from_template(prompt_template)
 
-# Use standard LCEL chain to avoid module errors with newer langchain versions
 chain = prompt | llm
+
+def clean_answer_text(text: str) -> str:
+    if not text:
+        return text
+    
+    # Remove thinking tags if present
+    text = re.sub(r'<think>.*?</think>', '', text, flags=re.DOTALL)
+    
+    # Remove markdown formatting if present
+    text = re.sub(r'```json\s*', '', text)
+    text = re.sub(r'```\s*', '', text)
+    
+    # If raw context dump leaked, truncate before Static QA Pair dump
+    if "Static QA Pair:" in text:
+        text = text.split("Static QA Pair:")[0]
+        
+    # Strip internal debug prefixes
+    text = re.sub(r'^Detailed Explanation:\s*', '', text, flags=re.IGNORECASE | re.MULTILINE)
+    text = re.sub(r'^Explanation:\s*', '', text, flags=re.IGNORECASE | re.MULTILINE)
+    text = re.sub(r'^Context:\s*', '', text, flags=re.IGNORECASE | re.MULTILINE)
+    text = re.sub(r'^Question:\s*', '', text, flags=re.IGNORECASE | re.MULTILINE)
+    text = re.sub(r'^Answer:\s*', '', text, flags=re.IGNORECASE | re.MULTILINE)
+    
+    return text.strip()
+
 
 def generate_answer(question: str, chat_history: list = None):
     if chat_history is None:
@@ -86,10 +104,8 @@ def generate_answer(question: str, chat_history: list = None):
     
     # 3. Parse JSON from response
     answer_text = content
-    suggested_questions = []
     
     try:
-        # Try to find JSON block if LLM wrapped it in markdown
         json_match = re.search(r'```json\s*(.*?)\s*```', content, re.DOTALL)
         if json_match:
             json_str = json_match.group(1)
@@ -97,20 +113,25 @@ def generate_answer(question: str, chat_history: list = None):
             json_str = content
             
         parsed_json = json.loads(json_str)
-        answer_text = parsed_json.get("answer", content)
-        suggested_questions = parsed_json.get("suggested_questions", [])
+        if isinstance(parsed_json, dict) and "answer" in parsed_json:
+            answer_text = parsed_json["answer"]
     except Exception as e:
         print(f"Failed to parse JSON response: {e}")
-        # Fallback if LLM failed to return JSON
-        answer_text = content.replace('```json', '').replace('```', '')
+        answer_text = content
+    
+    # Clean answer text from debug headers or leaked static QA blocks
+    clean_answer = clean_answer_text(answer_text)
+    if not clean_answer or len(clean_answer.strip()) < 5:
+        clean_answer = "மன்னித்துக்கொள்ளுங்கள், புறநானூறு தரவுத்தளத்தில் உங்கள் கேள்விக்கான தகவலைத் தேடுவதில் ஒரு சிறிய சிக்கல் ஏற்பட்டது. தயவுசெய்து மீண்டும் கேட்கவும்."
     
     # Extract clean source names from metadata (remove duplicates)
+
     unique_sources = list(set([f"{doc.metadata.get('poem_title', 'Unknown')} ({doc.metadata.get('poet', 'Unknown')})" for doc in docs]))
-    
     top_poem_title = docs[0].metadata.get("poem_title") if docs else None
     
     return {
-        "answer": answer_text,
+        "answer": clean_answer,
         "context_sources": unique_sources,
         "top_poem_title": top_poem_title
     }
+
