@@ -16,13 +16,36 @@ def health_check():
 
 @router.post("/poems/upload", response_model=dict)
 def upload_poems(poems: List[PoemCreate], db: Session = Depends(get_db)):
-    # 1. Save to SQLite
     db_poems = []
-    new_pydantic_poems = []
+    pydantic_poems_to_index = []
     
     for p in poems:
-        existing = db.query(Poem).filter(Poem.poem_title == p.basic_information.poem_title).first()
-        if not existing:
+        existing = db.query(Poem).filter(
+            or_(Poem.poem_title == p.basic_information.poem_title, Poem.poem_number == p.basic_information.poem_number)
+        ).first()
+        
+        if existing:
+            # Update existing poem record safely (No duplicate rows)
+            existing.poem_title = p.basic_information.poem_title
+            existing.poem_number = p.basic_information.poem_number
+            existing.anthology_name = p.basic_information.anthology_name
+            existing.poet_name = p.basic_information.poet_name
+            existing.basic_information = p.basic_information.model_dump()
+            existing.historical_information = p.historical_information.model_dump()
+            existing.meaning_interpretation = p.meaning_interpretation.model_dump()
+            existing.literary_classification = p.literary_classification
+            existing.literary_analysis = p.literary_analysis
+            existing.language_analysis = p.language_analysis
+            existing.grammar_analysis = p.grammar_analysis
+            existing.detailed_glossary = p.detailed_glossary
+            existing.line_by_line_meaning = p.line_by_line_meaning
+            existing.keywords = p.keywords
+            existing.named_entities = p.named_entities
+            existing.poem_structure = p.poem_structure
+            existing.references = p.references
+            db_poems.append(existing)
+            pydantic_poems_to_index.append(p)
+        else:
             db_poem = Poem(
                 poem_title=p.basic_information.poem_title,
                 poem_number=p.basic_information.poem_number,
@@ -44,14 +67,16 @@ def upload_poems(poems: List[PoemCreate], db: Session = Depends(get_db)):
             )
             db.add(db_poem)
             db_poems.append(db_poem)
-            new_pydantic_poems.append(p)
+            pydantic_poems_to_index.append(p)
+            
     db.commit()
     
-    # 2. Add to Chroma Vector DB
-    if new_pydantic_poems:
-        add_to_vector_db(new_pydantic_poems)
+    # Index in Vector DB
+    if pydantic_poems_to_index:
+        add_to_vector_db(pydantic_poems_to_index)
         
-    return {"message": f"Successfully uploaded {len(db_poems)} poems and indexed in vector database."}
+    return {"message": f"Successfully processed {len(db_poems)} poems and indexed in vector database."}
+
 
 @router.get("/poems/search", response_model=List[PoemResponse])
 def search_poems(keyword: str = None, poet: str = None, db: Session = Depends(get_db)):
