@@ -7,8 +7,9 @@ import { Observable } from 'rxjs';
 })
 export class ApiService {
   private baseUrl = (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'))
-    ? 'http://127.0.0.1:8000/api'
-    : 'https://sangam-ai.onrender.com/api';
+    ? 'http://127.0.0.1:8001/api'
+    : 'http://187.127.182.169:8001/api';
+
 
   constructor(private http: HttpClient) { }
 
