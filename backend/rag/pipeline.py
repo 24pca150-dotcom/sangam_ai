@@ -58,6 +58,18 @@ def clean_answer_text(text: str) -> str:
     text = re.sub(r'```json\s*', '', text)
     text = re.sub(r'```\s*', '', text)
     
+    # Try parsing raw JSON structure if stringified JSON leaked
+    trimmed = text.strip()
+    if trimmed.startswith('{') and '"answer"' in trimmed:
+        try:
+            parsed = json.loads(trimmed)
+            if isinstance(parsed, dict) and "answer" in parsed:
+                text = str(parsed["answer"])
+        except Exception:
+            match = re.search(r'"answer"\s*:\s*"([^"]+)"', trimmed, re.DOTALL)
+            if match:
+                text = match.group(1)
+
     # If raw context dump leaked, truncate before Static QA Pair dump
     if "Static QA Pair:" in text:
         text = text.split("Static QA Pair:")[0]
@@ -70,6 +82,7 @@ def clean_answer_text(text: str) -> str:
     text = re.sub(r'^Answer:\s*', '', text, flags=re.IGNORECASE | re.MULTILINE)
     
     return text.strip()
+
 
 
 def generate_answer(question: str, chat_history: list = None):
