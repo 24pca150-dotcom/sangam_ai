@@ -183,7 +183,7 @@ def chat_with_ai(request: ChatRequest, db: Session = Depends(get_db)):
             related = get_related_questions(db, high_confidence_qa)
             return ChatResponse(
                 answer=high_confidence_qa.answer,
-                context_sources=["Verified Dataset (Fuzzy Match)"],
+                context_sources=["உறுதிசெய்யப்பட்ட வினா-விடை சான்று (Verified Dataset)"],
                 suggested_questions=[r.question for r in related],
                 suggested_question_ids=[r.id for r in related],
                 is_verified_static=True
