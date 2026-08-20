@@ -43,11 +43,22 @@ export class AdminUploadComponent {
     this.message = '';
     
     try {
-      const jsonData = JSON.parse(this.fileContent);
-      
-      const apiCall = this.uploadMode === 'poem' 
-        ? this.api.uploadDataset(jsonData) 
-        : this.api.uploadQaDataset(jsonData);
+      let jsonData = JSON.parse(this.fileContent);
+      let apiCall;
+
+      if (this.uploadMode === 'poem') {
+        // If user uploaded a single poem JSON object instead of an array, wrap it in array
+        if (!Array.isArray(jsonData)) {
+          jsonData = [jsonData];
+        }
+        apiCall = this.api.uploadDataset(jsonData);
+      } else {
+        // If user uploaded a raw array of QA pairs, wrap it in the expected { qa_pairs: [...] } format
+        if (Array.isArray(jsonData)) {
+          jsonData = { qa_pairs: jsonData };
+        }
+        apiCall = this.api.uploadQaDataset(jsonData);
+      }
 
       apiCall.subscribe({
         next: (res) => {
@@ -59,7 +70,8 @@ export class AdminUploadComponent {
         },
         error: (err) => {
           console.error(err);
-          this.message = 'Failed to upload data. Check console for details.';
+          const detail = err.error?.detail ? (typeof err.error.detail === 'string' ? err.error.detail : JSON.stringify(err.error.detail)) : '';
+          this.message = 'Failed to upload data. ' + detail;
           this.isError = true;
           this.loading = false;
         }
@@ -70,4 +82,5 @@ export class AdminUploadComponent {
       this.loading = false;
     }
   }
+
 }
