@@ -142,14 +142,12 @@ def upload_qa_pairs(payload: PoemQAUploadRequest, db: Session = Depends(get_db))
 
 @router.get("/qa/starter", response_model=List[PoemQAResponse])
 def get_starter_qa(db: Session = Depends(get_db)):
-    # Fetch specific starter questions based on IDs or randomly from Factual
-    # We will pick original_id 1, 4, 9, 11
-    starter_ids = [1, 4, 9, 11]
-    starters = db.query(PoemQA).filter(PoemQA.original_id.in_(starter_ids)).all()
-    # If not found, return up to 4 factual
+    # Fetch questions directly from the user's uploaded PoemQA database
+    starters = db.query(PoemQA).filter(PoemQA.type == 'factual').limit(4).all()
     if not starters:
-        starters = db.query(PoemQA).filter(PoemQA.type == 'factual').limit(4).all()
+        starters = db.query(PoemQA).limit(4).all()
     return starters
+
 
 import random
 
