@@ -51,12 +51,12 @@ GROQ_API_KEY=your_groq_api_key_here
 ### 5. Run the Application
 Start the FastAPI server using Uvicorn:
 ```bash
-uvicorn main:app --port 8001 --reload
+uvicorn main:app --port 8000 --reload
 ```
-The server will start at `http://127.0.0.1:8001`.
+The server will start at `http://127.0.0.1:8000`.
 
 ## API Documentation
 FastAPI provides auto-generated interactive API documentation. Once the server is running, you can access it here:
-- **Swagger UI**: [http://127.0.0.1:8001/docs](http://127.0.0.1:8001/docs)
-- **ReDoc**: [http://127.0.0.1:8001/redoc](http://127.0.0.1:8001/redoc)
+- **Swagger UI**: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+- **ReDoc**: [http://127.0.0.1:8000/redoc](http://127.0.0.1:8000/redoc)
 
