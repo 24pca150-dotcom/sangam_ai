@@ -19,11 +19,14 @@ prompt_template = """
 You are an expert Sangam Tamil Literature AI assistant.
 Answer the user's question clearly, concisely, and accurately in natural Tamil.
 
-Rules:
-1. Provide ONLY a clean, well-formatted Tamil answer.
-2. DO NOT include any debug labels, internal headers (like "Detailed Explanation:", "Static QA Pair:", "Question:", "Answer:").
-3. If the user provides a single word or short term (e.g. 'திங்கள்', 'உவமை', 'தேர்'), explain its meaning clearly in Tamil based on Sangam literature context.
-4. YOU MUST RETURN YOUR RESPONSE AS A VALID JSON OBJECT with exactly one key: "answer".
+STRICT RAG RULES:
+1. Answer STRICTLY and ONLY using the provided Context below.
+2. DO NOT use external general knowledge or hallucinate any facts not explicitly present in the Context.
+3. If the user's question cannot be answered using ONLY the provided Context, respond with exact JSON:
+   {{"answer": "மன்னித்துக்கொள்ளுங்கள், இந்த கேள்விக்கான தகவல்கள் நமது தரவுத்தளத்தில் பதிவேற்றப்படவில்லை."}}
+4. Provide ONLY a clean, well-formatted Tamil answer.
+5. DO NOT include any debug labels, internal headers (like "Detailed Explanation:", "Static QA Pair:", "Question:", "Answer:").
+6. YOU MUST RETURN YOUR RESPONSE AS A VALID JSON OBJECT with exactly one key: "answer".
 
 Output Format:
 ```json
@@ -101,6 +104,29 @@ def generate_answer(question: str, chat_history: list = None):
         
     # 1. Retrieve relevant context manually using enhanced search query
     docs = vector_store.similarity_search(search_query, k=3)
+    
+    # Strict validation: Check if user asked for a specific poem number (e.g. '89', '87', '101')
+    requested_numbers = re.findall(r'\b\d+\b', question)
+    if requested_numbers:
+        found_in_docs = False
+        for req_num in requested_numbers:
+            for doc in docs:
+                doc_title = str(doc.metadata.get('poem_title', ''))
+                if req_num in doc_title or req_num in doc.page_content:
+                    found_in_docs = True
+                    break
+            if found_in_docs:
+                break
+        
+        # If user explicitly asked for a poem number not found in retrieved docs context
+        if not found_in_docs:
+            req_num_str = requested_numbers[0]
+            return {
+                "answer": f"மன்னித்துக்கொள்ளுங்கள், புறநானூறு {req_num_str} பற்றிய தகவல்கள் நமது தரவுத்தளத்தில் பதிவேற்றப்படவில்லை. Admin பதிவேற்றிய பாடல்கள் பற்றி மட்டுமே என்னால் தகவல் அளிக்க முடியும்.",
+                "context_sources": [],
+                "top_poem_title": None
+            }
+
     context_text = "\n\n".join([doc.page_content for doc in docs])
     
     # 2. Invoke the LLM with the context, history, and original question
