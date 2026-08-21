@@ -190,7 +190,17 @@ def chat_with_ai(request: ChatRequest, db: Session = Depends(get_db)):
         high_confidence_qa = None
         best_ratio = 0.0
         
+        user_nums = re.findall(r'\b\d+\b', request.question)
+        
         for qa in all_qas:
+            # If user specified a poem number (e.g. 89), ensure QA pair matches that poem number
+            if user_nums:
+                qa_text = f"{qa.question} {qa.poem_id or ''}"
+                poem_obj = db.query(Poem).filter(Poem.id == qa.poem_id).first() if qa.poem_id else None
+                poem_num_str = str(poem_obj.poem_number) if poem_obj else ""
+                if not any(num in qa_text or num == poem_num_str for num in user_nums):
+                    continue
+
             db_q_clean = clean_str(qa.question)
             
             # Exact clean match or high ratio
