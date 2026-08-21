@@ -226,6 +226,10 @@ def chat_with_ai(request: ChatRequest, db: Session = Depends(get_db)):
                 # Fetch related questions belonging strictly to the matched poem
                 related_qas = db.query(PoemQA).filter(PoemQA.poem_id == poem.id).limit(4).all()
         
+        # Fallback: if no specific poem QA pairs found, fetch 4 questions from dataset so suggestions are always shown
+        if not related_qas:
+            related_qas = db.query(PoemQA).limit(4).all()
+        
         return ChatResponse(
             answer=result["answer"],
             context_sources=result["context_sources"],
