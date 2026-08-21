@@ -106,7 +106,7 @@ def generate_answer(question: str, chat_history: list = None):
     docs = vector_store.similarity_search(search_query, k=3)
     
     # Strict validation: Check if user asked for a specific poem number (e.g. '89', '87', '101')
-    requested_numbers = re.findall(r'\b\d+\b', question)
+    requested_numbers = re.findall(r'\d+', question)
     if requested_numbers:
         found_in_docs = False
         for req_num in requested_numbers:

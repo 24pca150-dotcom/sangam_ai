@@ -190,7 +190,7 @@ def chat_with_ai(request: ChatRequest, db: Session = Depends(get_db)):
         high_confidence_qa = None
         best_ratio = 0.0
         
-        user_nums = re.findall(r'\b\d+\b', request.question)
+        user_nums = re.findall(r'\d+', request.question)
         
         for qa in all_qas:
             # If user specified a poem number (e.g. 89), ensure QA pair matches that poem number
