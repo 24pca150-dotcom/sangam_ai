@@ -220,19 +220,17 @@ def chat_with_ai(request: ChatRequest, db: Session = Depends(get_db)):
         
         top_poem_title = result.get("top_poem_title")
         related_qas = []
-        if top_poem_title:
+        is_not_found = "மன்னித்துக்கொள்ளுங்கள்" in result.get("answer", "") or not top_poem_title
+        
+        # Only fetch related questions if the poem/info WAS actually found in database
+        if not is_not_found and top_poem_title:
             poem = db.query(Poem).filter(Poem.poem_title == top_poem_title).first()
             if poem:
-                # Fetch related questions belonging strictly to the matched poem
                 related_qas = db.query(PoemQA).filter(PoemQA.poem_id == poem.id).limit(4).all()
-        
-        # Fallback: if no specific poem QA pairs found, fetch 4 questions from dataset so suggestions are always shown
-        if not related_qas:
-            related_qas = db.query(PoemQA).limit(4).all()
         
         return ChatResponse(
             answer=result["answer"],
-            context_sources=result["context_sources"],
+            context_sources=[] if is_not_found else result["context_sources"],
             suggested_questions=[r.question for r in related_qas],
             suggested_question_ids=[r.id for r in related_qas],
             is_verified_static=False
