@@ -122,7 +122,7 @@ def generate_answer(question: str, chat_history: list = None):
         if not found_in_docs:
             req_num_str = requested_numbers[0]
             return {
-                "answer": f"மன்னித்துக்கொள்ளுங்கள், புறநானூறு {req_num_str} பற்றிய தகவல்கள் நமது தரவுத்தளத்தில் பதிவேற்றப்படவில்லை. Admin பதிவேற்றிய பாடல்கள் பற்றி மட்டுமே என்னால் தகவல் அளிக்க முடியும்.",
+                "answer": f"மன்னித்துக்கொள்ளுங்கள், புறநானூறு {req_num_str} பற்றிய தகவல்கள் நமது தரவுத்தளத்தில் பதிவேற்றப்படவில்லை.",
                 "context_sources": [],
                 "top_poem_title": None
             }
