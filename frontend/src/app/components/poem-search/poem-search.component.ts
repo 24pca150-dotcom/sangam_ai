@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -10,12 +10,16 @@ import { ApiService } from '../../services/api.service';
   imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './poem-search.component.html'
 })
-export class PoemSearchComponent {
+export class PoemSearchComponent implements OnInit {
   searchQuery = '';
   results: any[] = [];
   loading = false;
 
   constructor(private api: ApiService) {}
+
+  ngOnInit() {
+    this.search();
+  }
 
   search() {
     this.loading = true;
