@@ -61,17 +61,23 @@ def clean_answer_text(text: str) -> str:
     text = re.sub(r'```json\s*', '', text)
     text = re.sub(r'```\s*', '', text)
     
-    # Try parsing raw JSON structure if stringified JSON leaked
     trimmed = text.strip()
-    if trimmed.startswith('{') and '"answer"' in trimmed:
+    if '"answer"' in trimmed:
         try:
             parsed = json.loads(trimmed)
             if isinstance(parsed, dict) and "answer" in parsed:
-                text = str(parsed["answer"])
+                return str(parsed["answer"]).strip()
         except Exception:
-            match = re.search(r'"answer"\s*:\s*"([^"]+)"', trimmed, re.DOTALL)
-            if match:
-                text = match.group(1)
+            pass
+            
+        # Robust regex fallback that handles quotes inside answer text
+        match = re.search(r'"answer"\s*:\s*"(.*)"', trimmed, re.DOTALL)
+        if match:
+            extracted = match.group(1).strip()
+            if extracted.endswith('"}') or extracted.endswith('"'):
+                extracted = re.sub(r'"\}?$', '', extracted).strip()
+            if len(extracted) > 2:
+                return extracted
 
     # If raw context dump leaked, truncate before Static QA Pair dump
     if "Static QA Pair:" in text:
@@ -97,9 +103,12 @@ def generate_answer(question: str, chat_history: list = None):
     for msg in chat_history:
         history_str += f"{msg.role.capitalize()}: {msg.content}\n"
     
-    # Enhance search query if it's a single word or short phrase
-    search_query = question
-    if len(question.strip().split()) <= 2:
+    # Clean vector search query for better Qdrant retrieval
+    search_query = re.sub(r'\b(summary|solu|pathi|tell|about|details)\b', '', question, flags=re.IGNORECASE).strip()
+    if not search_query or len(search_query.strip().split()) <= 1:
+        search_query = question
+
+    if len(question.strip().split()) <= 2 and not re.search(r'\d+', question):
         search_query = f"{question} என்பதன் பொருள் என்ன?"
         
     # 1. Retrieve relevant context manually using enhanced search query
