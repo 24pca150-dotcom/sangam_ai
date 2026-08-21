@@ -151,13 +151,73 @@ def get_starter_qa(db: Session = Depends(get_db)):
 
 import random
 
+def get_smart_suggestions(db: Session, current_question: str, current_qa_id: int = None, target_poem_title: str = None, chat_history: list = None):
+    import re
+    def clean_str_local(s: str) -> str:
+        return re.sub(r'[^\w\s]', '', s or '').strip().lower()
+
+    asked_texts = set()
+    if current_question:
+        asked_texts.add(clean_str_local(current_question))
+    if chat_history:
+        for msg in chat_history:
+            content = getattr(msg, 'content', None) or (msg.get('content') if isinstance(msg, dict) else None)
+            if content:
+                asked_texts.add(clean_str_local(content))
+    
+    target_nums = re.findall(r'\d+', f"{target_poem_title or ''} {current_question or ''}")
+    candidate_qas = []
+    
+    if target_nums:
+        req_num = target_nums[0]
+        if req_num.isdigit():
+            poems = db.query(Poem).filter(Poem.poem_number == int(req_num)).all()
+            poem_ids = [p.id for p in poems]
+            if poem_ids:
+                candidate_qas = db.query(PoemQA).filter(PoemQA.poem_id.in_(poem_ids)).all()
+        
+        if not candidate_qas:
+            candidate_qas = db.query(PoemQA).filter(
+                or_(PoemQA.question.ilike(f"%{req_num}%"), PoemQA.answer.ilike(f"%{req_num}%"))
+            ).all()
+
+    if not candidate_qas and current_qa_id:
+        qa_obj = db.query(PoemQA).filter(PoemQA.id == current_qa_id).first()
+        if qa_obj and qa_obj.poem_id:
+            candidate_qas = db.query(PoemQA).filter(PoemQA.poem_id == qa_obj.poem_id).all()
+            
+    if not candidate_qas:
+        candidate_qas = db.query(PoemQA).all()
+
+    final_suggestions = []
+    for qa in candidate_qas:
+        if current_qa_id and qa.id == current_qa_id:
+            continue
+        q_clean = clean_str_local(qa.question)
+        if any(asked == q_clean for asked in asked_texts):
+            continue
+        final_suggestions.append(qa)
+        if len(final_suggestions) >= 4:
+            break
+            
+    if len(final_suggestions) < 4:
+        all_other = db.query(PoemQA).all()
+        for qa in all_other:
+            if any(f.id == qa.id for f in final_suggestions):
+                continue
+            if current_qa_id and qa.id == current_qa_id:
+                continue
+            q_clean = clean_str_local(qa.question)
+            if any(asked == q_clean for asked in asked_texts):
+                continue
+            final_suggestions.append(qa)
+            if len(final_suggestions) >= 4:
+                break
+                
+    return final_suggestions
+
 def get_related_questions(db: Session, qa: PoemQA):
-    # Get questions belonging strictly to the same poem
-    related = db.query(PoemQA).filter(
-        PoemQA.poem_id == qa.poem_id, 
-        PoemQA.id != qa.id
-    ).order_by(PoemQA.original_id).limit(4).all()
-    return related
+    return get_smart_suggestions(db, current_question=qa.question, current_qa_id=qa.id)
 
 @router.get("/qa/{question_id}", response_model=dict)
 def get_qa_answer(question_id: int, db: Session = Depends(get_db)):
@@ -165,7 +225,7 @@ def get_qa_answer(question_id: int, db: Session = Depends(get_db)):
     if not qa:
         raise HTTPException(status_code=404, detail="Question not found")
         
-    related = get_related_questions(db, qa)
+    related = get_smart_suggestions(db, current_question=qa.question, current_qa_id=qa.id)
     
     return {
         "answer": qa.answer,
@@ -180,7 +240,6 @@ def chat_with_ai(request: ChatRequest, db: Session = Depends(get_db)):
         import difflib, re
         
         def clean_str(s: str) -> str:
-            # Remove punctuation, quotes, and symbols
             return re.sub(r'[^\w\s]', '', s).strip().lower()
 
         user_q_clean = clean_str(request.question)
@@ -193,7 +252,6 @@ def chat_with_ai(request: ChatRequest, db: Session = Depends(get_db)):
         user_nums = re.findall(r'\d+', request.question)
         
         for qa in all_qas:
-            # If user specified a poem number (e.g. 89), ensure QA pair matches that poem number
             if user_nums:
                 qa_text = f"{qa.question} {qa.poem_id or ''}"
                 poem_obj = db.query(Poem).filter(Poem.id == qa.poem_id).first() if qa.poem_id else None
@@ -202,11 +260,7 @@ def chat_with_ai(request: ChatRequest, db: Session = Depends(get_db)):
                     continue
 
             db_q_clean = clean_str(qa.question)
-            
-            # Exact clean match or high ratio
             ratio = difflib.SequenceMatcher(None, user_q_clean, db_q_clean).ratio()
-            
-            # Also check key word overlap
             main_keywords = [w for w in re.sub(r'[^\w\s]', '', qa.question).split() if len(w) > 3]
             keyword_match = any(kw.lower() in user_q_clean for kw in main_keywords) if main_keywords else False
             
@@ -216,7 +270,7 @@ def chat_with_ai(request: ChatRequest, db: Session = Depends(get_db)):
                     high_confidence_qa = qa
                     
         if high_confidence_qa:
-            related = get_related_questions(db, high_confidence_qa)
+            related = get_smart_suggestions(db, current_question=request.question, current_qa_id=high_confidence_qa.id, chat_history=request.chat_history)
             return ChatResponse(
                 answer=high_confidence_qa.answer,
                 context_sources=["உறுதிசெய்யப்பட்ட வினா-விடை சான்று (Verified Dataset)"],
@@ -234,16 +288,12 @@ def chat_with_ai(request: ChatRequest, db: Session = Depends(get_db)):
         
         # Only fetch related questions if valid answer was found in database
         if not is_not_found:
-            if top_poem_title:
-                poem = db.query(Poem).filter(
-                    or_(Poem.poem_title == top_poem_title, Poem.poem_title.ilike(f"%{top_poem_title}%"))
-                ).first()
-                if poem:
-                    related_qas = db.query(PoemQA).filter(PoemQA.poem_id == poem.id).limit(4).all()
-            
-            # If valid answer found but no poem-specific QA pairs linked, fetch 4 questions from dataset
-            if not related_qas:
-                related_qas = db.query(PoemQA).limit(4).all()
+            related_qas = get_smart_suggestions(
+                db, 
+                current_question=request.question, 
+                target_poem_title=top_poem_title, 
+                chat_history=request.chat_history
+            )
         
         return ChatResponse(
             answer=result["answer"],
