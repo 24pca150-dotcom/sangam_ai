@@ -232,18 +232,13 @@ def chat_with_ai(request: ChatRequest, db: Session = Depends(get_db)):
         related_qas = []
         is_not_found = "மன்னித்துக்கொள்ளுங்கள்" in result.get("answer", "") or not top_poem_title
         
-        # Only fetch related questions if valid answer was found in database
-        if not is_not_found:
-            if top_poem_title:
-                poem = db.query(Poem).filter(
-                    or_(Poem.poem_title == top_poem_title, Poem.poem_title.ilike(f"%{top_poem_title}%"))
-                ).first()
-                if poem:
-                    related_qas = db.query(PoemQA).filter(PoemQA.poem_id == poem.id).limit(4).all()
-            
-            # If valid answer found but no poem-specific QA pairs linked, fetch 4 questions from dataset
-            if not related_qas:
-                related_qas = db.query(PoemQA).limit(4).all()
+        # Only fetch related questions if strictly linked to the matched poem
+        if not is_not_found and top_poem_title:
+            poem = db.query(Poem).filter(
+                or_(Poem.poem_title == top_poem_title, Poem.poem_title.ilike(f"%{top_poem_title}%"))
+            ).first()
+            if poem:
+                related_qas = db.query(PoemQA).filter(PoemQA.poem_id == poem.id).limit(4).all()
         
         return ChatResponse(
             answer=result["answer"],
