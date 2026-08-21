@@ -139,7 +139,15 @@ def generate_answer(question: str, chat_history: list = None):
     
     # Extract clean source names from metadata (remove duplicates)
 
-    unique_sources = list(set([f"{doc.metadata.get('poem_title', 'Unknown')} ({doc.metadata.get('poet', 'Unknown')})" for doc in docs]))
+    sources = []
+    for doc in docs:
+        title = doc.metadata.get('poem_title') or 'புறநானூறு'
+        poet = doc.metadata.get('poet')
+        if poet and poet != 'Unknown' and poet.strip():
+            sources.append(f"{title} ({poet})")
+        else:
+            sources.append(f"{title}")
+    unique_sources = list(dict.fromkeys(sources))
     top_poem_title = docs[0].metadata.get("poem_title") if docs else None
     
     return {
