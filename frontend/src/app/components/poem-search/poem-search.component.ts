@@ -30,4 +30,11 @@ export class PoemSearchComponent {
       }
     });
   }
+
+  getCleanText(poem: any): string {
+    if (poem?.line_by_line_meaning?.length) {
+      return poem.line_by_line_meaning.map((l: any) => l.split_line).join(' ');
+    }
+    return poem?.basic_information?.original_tamil_text || '';
+  }
 }
