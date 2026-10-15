@@ -6,8 +6,8 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ApiService {
-  private baseUrl = 'https://frankfurt-journals-got-attempt.trycloudflare.com/api';
-
+  // Live Server Backend URL
+  private baseUrl = 'https://sangamai-api.macvelsoftware.com/api';
 
   constructor(private http: HttpClient) { }
 

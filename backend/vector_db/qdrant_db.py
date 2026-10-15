@@ -1,5 +1,5 @@
 from langchain_qdrant import QdrantVectorStore
-from langchain_huggingface import HuggingFaceEndpointEmbeddings
+from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from qdrant_client import QdrantClient
 from qdrant_client.http.models import Distance, VectorParams
@@ -10,12 +10,10 @@ load_dotenv()
 
 QDRANT_URL = os.getenv("QDRANT_URL")
 QDRANT_API_KEY = os.getenv("QDRANT_API_KEY")
-HF_TOKEN = os.getenv("HUGGINGFACEHUB_API_TOKEN")
 
-# Initialize Embedding Model using HuggingFace Inference API
-embeddings = HuggingFaceEndpointEmbeddings(
-    huggingfacehub_api_token=HF_TOKEN,
-    model="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
+# Initialize robust local Embedding Model (Zero API cost, works 100% offline & with Cloud Qdrant)
+embeddings = HuggingFaceEmbeddings(
+    model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
 )
 
 COLLECTION_NAME = "sangam_detailed_poems"

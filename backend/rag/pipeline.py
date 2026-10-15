@@ -11,7 +11,7 @@ load_dotenv()
 # Initialize Groq LLM
 llm = ChatGroq(
     temperature=0.4,
-    model_name="qwen/qwen3.6-27b", 
+    model_name="qwen/qwen3.8-27b", 
     api_key=os.getenv("GROQ_API_KEY", "dummy_key_change_me")
 )
 
@@ -103,7 +103,64 @@ def generate_answer(question: str, chat_history: list = None):
     for msg in chat_history:
         history_str += f"{msg.role.capitalize()}: {msg.content}\n"
     
-    # Clean vector search query for better Qdrant retrieval
+    # 1. Hybrid Search: Check PostgreSQL for structured poem data if a poem number is mentioned
+    numbers = [int(n) for n in re.findall(r'\b\d+\b', question)]
+    poem_numbers = [n for n in numbers if 1 <= n <= 400]
+    
+    db_context = ""
+    db_poem = None
+    target_poem_title = None
+    
+    try:
+        from models.database import SessionLocal, Poem
+        with SessionLocal() as db_session:
+            for num in poem_numbers:
+                p = db_session.query(Poem).filter(Poem.poem_number == num).first()
+                if p:
+                    db_poem = p
+                    target_poem_title = p.poem_title
+                    basic = p.basic_information or {}
+                    mean = p.meaning_interpretation or {}
+                    histo = p.historical_information or {}
+                    lines = p.line_by_line_meaning or []
+                    
+                    lines_text = ""
+                    if lines and isinstance(lines, list):
+                        for idx, item in enumerate(lines, 1):
+                            if isinstance(item, dict):
+                                split_l = item.get('split_line', '')
+                                l_mean = item.get('meaning', '')
+                                lines_text += f"\nவரி {idx}: {split_l} -> பொருள்: {l_mean}"
+                    
+                    db_context = f"""
+=== அதிகாரப்பூர்வ புறநானூறு தரவுத்தள தகவல் ===
+பாடல் தலைப்பு: {p.poem_title}
+பாடல் எண்: {p.poem_number}
+நூல்: {p.anthology_name}
+புலவர்: {p.poet_name}
+அரசர்: {histo.get('king_mentioned', '')}
+
+அசல் பாடல் வரிகள்:
+{basic.get('original_tamil_text', '')}
+
+ஒவ்வொரு வரிக்கான பொருள் (Line by Line Meaning):
+{lines_text}
+
+எளிய விளக்கம்:
+{mean.get('simple_tamil_meaning', '')}
+
+விரிவான விளக்கம்:
+{mean.get('detailed_tamil_explanation', '')}
+
+வரலாற்று பின்னணி:
+{histo.get('historical_context', '')}
+==========================================
+"""
+                    break
+    except Exception as db_err:
+        print(f"Hybrid DB lookup note: {db_err}")
+
+    # 2. Vector Semantic Search
     search_query = re.sub(r'\b(summary|solu|pathi|tell|about|details)\b', '', question, flags=re.IGNORECASE).strip()
     if not search_query or len(search_query.strip().split()) <= 1:
         search_query = question
@@ -111,48 +168,46 @@ def generate_answer(question: str, chat_history: list = None):
     if len(question.strip().split()) <= 2 and not re.search(r'\d+', question):
         search_query = f"{question} என்பதன் பொருள் என்ன?"
         
-    # 1. Retrieve relevant context manually using enhanced search query
-    docs = vector_store.similarity_search(search_query, k=3)
+    docs = vector_store.similarity_search(search_query, k=4)
     
-    # Strict validation: Check if user asked for a specific poem number (e.g. '89', '87', '101')
-    requested_numbers = re.findall(r'\d+', question)
-    if requested_numbers:
+    # Validation: If a specific poem number was asked but not found in DB or docs
+    if poem_numbers and not db_poem:
         found_in_docs = False
-        for req_num in requested_numbers:
+        for num in poem_numbers:
             for doc in docs:
                 doc_title = str(doc.metadata.get('poem_title', ''))
-                if req_num in doc_title or req_num in doc.page_content:
+                if str(num) in doc_title or str(num) in doc.page_content:
                     found_in_docs = True
                     break
             if found_in_docs:
                 break
         
-        # If user explicitly asked for a poem number not found in retrieved docs context
         if not found_in_docs:
-            req_num_str = requested_numbers[0]
+            req_num_str = poem_numbers[0]
             return {
                 "answer": f"மன்னித்துக்கொள்ளுங்கள், புறநானூறு {req_num_str} பற்றிய தகவல்கள் நமது தரவுத்தளத்தில் பதிவேற்றப்படவில்லை.",
                 "context_sources": [],
                 "top_poem_title": None
             }
 
-    context_text = "\n\n".join([doc.page_content for doc in docs])
+    # Combine DB context and Vector search chunks
+    vector_context = "\n\n".join([doc.page_content for doc in docs])
+    combined_context = f"{db_context}\n\n{vector_context}".strip()
     
-    # 2. Invoke the LLM with the context, history, and original question
+    # 3. Invoke LLM
     content = ""
     try:
-        response = chain.invoke({"context": context_text, "chat_history": history_str, "input": question})
+        response = chain.invoke({"context": combined_context, "chat_history": history_str, "input": question})
         content = response.content
     except Exception as llm_err:
         print(f"LLM Invoke error: {llm_err}")
-        if context_text and context_text.strip():
-            content = context_text
+        if combined_context:
+            content = combined_context
         else:
             content = "மன்னித்துக்கொள்ளுங்கள், இந்த கேள்விக்கான தகவல் தரவுத்தளத்தில் கண்டறியப்படவில்லை."
     
-    # 3. Parse JSON from response
+    # 4. Parse JSON from response
     answer_text = content
-    
     try:
         json_match = re.search(r'```json\s*(.*?)\s*```', content, re.DOTALL)
         if json_match:
@@ -167,14 +222,13 @@ def generate_answer(question: str, chat_history: list = None):
         print(f"Failed to parse JSON response: {e}")
         answer_text = content
     
-    # Clean answer text from debug headers or leaked static QA blocks
     clean_answer = clean_answer_text(answer_text)
     if not clean_answer or len(clean_answer.strip()) < 5:
         clean_answer = "மன்னித்துக்கொள்ளுங்கள், புறநானூறு தரவுத்தளத்தில் உங்கள் கேள்விக்கான தகவலைத் தேடுவதில் ஒரு சிறிய சிக்கல் ஏற்பட்டது. தயவுசெய்து மீண்டும் கேட்கவும்."
     
-    # Extract clean source names from metadata (remove duplicates)
-
     sources = []
+    if target_poem_title:
+        sources.append(target_poem_title)
     for doc in docs:
         title = doc.metadata.get('poem_title') or 'புறநானூறு'
         poet = doc.metadata.get('poet')
@@ -183,7 +237,7 @@ def generate_answer(question: str, chat_history: list = None):
         else:
             sources.append(f"{title}")
     unique_sources = list(dict.fromkeys(sources))
-    top_poem_title = docs[0].metadata.get("poem_title") if docs else None
+    top_poem_title = target_poem_title or (docs[0].metadata.get("poem_title") if docs else None)
     
     return {
         "answer": clean_answer,
